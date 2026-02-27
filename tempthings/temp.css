@@ -1,0 +1,74 @@
+table {
+    border-collapse: collapse;
+    margin: auto;
+    background-color: #f0f0f0;
+}
+
+td {
+    height: 150px;
+    width: 150px;
+    text-align: center;
+    /* Centers light horizontally */
+    vertical-align: middle;
+    /* Centers light vertically */
+}
+
+/* Corner styling where lights sit */
+.corner {
+    background-color: #e0e0e0;
+}
+
+/* Road styling with dashed lines */
+.road-v {
+    background-color: #444;
+    border-left: 2px dashed white;
+    border-right: 2px dashed white;
+}
+
+.road-h {
+    background-color: #444;
+    border-top: 2px dashed white;
+    border-bottom: 2px dashed white;
+}
+
+.intersection {
+    background-color: #444;
+}
+
+/* Your Traffic Light Styles */
+.traffic-light {
+    background: #222;
+    border-radius: 10px;
+    height: 60px;
+    width: 25px;
+    padding: 5px;
+    display: inline-flex;
+    /* Changed to inline-flex to work with text-align */
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: solid 3px #333;
+}
+
+.bulb {
+    background: #111;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+}
+
+/* Light states */
+.red.on {
+    background: #ff0000;
+    box-shadow: 0 0 10px #ff0000;
+}
+
+.yellow.on {
+    background: #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
+}
+
+.green.on {
+    background: #00ff00;
+    box-shadow: 0 0 10px #00ff00;
+}
