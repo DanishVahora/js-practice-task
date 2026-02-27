@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td style="height: 200px; width: 200px; border-left: hidden; border-top: hidden;"></td>
+            <!-- top -->
+            <td class="signal-block" id="signal-top"
+                style="height: 200px; width: 200px; border-bottom: 2px dashed #000;">
+                <div class="time-left" style="text-align: center; font-weight: bold; font-family: sans-serif; transform: rotate(180deg);">25:00
+                </div>
+                <table style="height: 100%; width: 100%;">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="light green" style="border-radius: 80px;"></td>
+                        <td class="light yellow" style="border-radius: 80px;"></td>
+                        <td class="light red" style="border-radius: 80px;"></td>
+                    </tr>
+                </table>
+            </td>
+            <td style="height: 200px; width: 200px; border-right: hidden; border-top: hidden;"></td>
+        </tr>
+        <tr>
+            <!-- left -->
+            <td class="signal-block" id="signal-left"
+                style="height: 200px; width: 200px; border-right: 2px dashed #000;">
+                
+                <table style="height: 100%; width: 100%;">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="light red" style="border-radius: 80px;"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="light yellow" style="border-radius: 80px;"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="light green" style="border-radius: 80px;"></td>
+                    </tr>
+                    
+                </table>
+                
+            </td>
+            <td></td>
+            <!-- right -->
+            <td class="signal-block" id="signal-right"
+                style="height: 200px; width: 200px; border-left: 2px dashed #000;">
+                
+                <table style="height: 100%; width: 100%;">
+                    <tr>
+                        <td class="light green" style="border-radius: 80px;"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="light yellow" style="border-radius: 80px;"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="light red" style="border-radius: 80px;"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="height: 200px; width: 200px; border-left: hidden; border-bottom: hidden;"></td>
+            <!-- bottom -->
+            <td class="signal-block" id="signal-bottom"
+                style="height: 200px; width: 200px; border-top: 2px dashed #000;">
+                
+                <table style="height: 100%; width: 100%;">
+                    <tr>
+                        <td class="light red" style="border-radius: 80px;"></td>
+                        <td class="light yellow" style="border-radius: 80px;"></td>
+                        <td class="light green" style="border-radius: 80px;"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </td>
+            <td style="height: 200px; width: 200px; border-right: hidden; border-bottom: hidden;"></td>
+        </tr>
+    </table>
+    <button onclick="updateLights();">Start</button>
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+table { border-collapse: collapse; }
+
+.light { width: 60px; height: 60px; background-color: #333; } 
+
+.light.red.active { 
+    background-color: red; 
+    box-shadow: 0 0 20px red; 
+}
+.light.yellow.active { 
+    background-color: yellow; 
+    box-shadow: 0 0 20px yellow; 
+}
+.light.green.active { 
+    background-color: lime; 
+    box-shadow: 0 0 20px lime; 
+}
+
+
+#red{
+    background-color: red;
+}
+
+#green{
+    background-color: green;
+}
+#yellow{
+    background-color: yellow;
+}
