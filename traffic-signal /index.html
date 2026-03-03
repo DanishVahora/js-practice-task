@@ -13,9 +13,9 @@
         <tr>
             <td style="height: 200px; width: 200px; border-left: hidden; border-top: hidden;"></td>
             <!-- top -->
-            <td class="signal-block" id="signal-top"
+            <td  id="signal-top"
                 style="height: 200px; width: 200px; border-bottom: 2px dashed #000;">
-                <div class="time-left" style="text-align: center; font-weight: bold; font-family: sans-serif; transform: rotate(180deg);">25:00
+                <div id="time-left-1" class="time-left" style="text-align: center; font-weight: bold; font-family: sans-serif; ">--:--
                 </div>
                 <table style="height: 100%; width: 100%;">
                     <tr>
@@ -39,9 +39,9 @@
         </tr>
         <tr>
             <!-- left -->
-            <td class="signal-block" id="signal-left"
+            <td  id="signal-left"
                 style="height: 200px; width: 200px; border-right: 2px dashed #000;">
-                
+                <div id="time-left-2" class="time-left" style="text-align: center; font-weight: bold; font-family: sans-serif;">--:--</div>
                 <table style="height: 100%; width: 100%;">
                     <tr>
                         <td></td>
@@ -66,9 +66,9 @@
             </td>
             <td></td>
             <!-- right -->
-            <td class="signal-block" id="signal-right"
+            <td  id="signal-right"
                 style="height: 200px; width: 200px; border-left: 2px dashed #000;">
-                
+                <div id="time-left-3" class="time-left" style="text-align: center; font-weight: bold; font-family: sans-serif; ">--:--</div>
                 <table style="height: 100%; width: 100%;">
                     <tr>
                         <td class="light green" style="border-radius: 80px;"></td>
@@ -91,9 +91,9 @@
         <tr>
             <td style="height: 200px; width: 200px; border-left: hidden; border-bottom: hidden;"></td>
             <!-- bottom -->
-            <td class="signal-block" id="signal-bottom"
+            <td  id="signal-bottom"
                 style="height: 200px; width: 200px; border-top: 2px dashed #000;">
-                
+                <div id="time-left-4" class="time-left" style="text-align: center; font-weight: bold; font-family: sans-serif;">--:--</div>
                 <table style="height: 100%; width: 100%;">
                     <tr>
                         <td class="light red" style="border-radius: 80px;"></td>
@@ -115,8 +115,8 @@
             <td style="height: 200px; width: 200px; border-right: hidden; border-bottom: hidden;"></td>
         </tr>
     </table>
-    <button onclick="updateLights();">Start</button>
-    <script src="script.js"></script>
+    <button onclick=" updateTimes(); updateLights();">Start</button>
+    <script src="temp.js"></script>
 
 </body>
 

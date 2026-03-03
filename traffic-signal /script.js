@@ -25,6 +25,7 @@ function updateLights() {
         currentIndex = (currentIndex + 1) % 4
         updateLights();
     }, green);
-    console.log()
+    console.log(currentBlock)
+    console.log(currentIndex)
 }
 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <h1 style="display: flex; justify-content: center;">Form Practice</h1>
+    <form>
+
+        <!-- basic details -->
+        <div id="basic_details">
+            <fieldset>
+                <legend style="font-size: larger;">Basic Details :</legend>
+                <br>
+                <label for="fname">First name:</label>
+                <input type="text" id="fname" name="fname">
+                <label style="padding-left: 75px;" for="lname">Last name:</label>
+                <input type="text" id="lname" name="lname">
+                <br>
+                <br>
+                <label for="designation">Designation:</label>
+                <input type="text" id="designation" name="designation">
+                <br>
+                <br>
+                <br>
+                <br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <label style="padding-left: 75px;" for="mobile_number">Mobile Number:</label>
+                <input type="tel" id="mobile_number" name="mobilenumber">
+                <br>
+                <br>
+                <br>
+                <br>
+                <label for="adress_1">Address 1:</label>
+                <input type="text" id="adress_1" name="adress_1">
+                <label style="padding-left: 75px;" for="adress_2">Address 2:</label>
+                <input type="text" id="adress_2" name="adress_2">
+                <br>
+                <br>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+                <label style="padding-left: 75px;" for="state">State:</label>
+                <select name="state" id="state">
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Delhi">Delhi</option>
+                </select>
+                <label style="padding-left: 75px;" for="pincode">Pincode:</label>
+                <input type="text" id="pincode" name="pincode">
+                <br>
+                <br>
+                <br>
+                <br>
+                <label>Gender</label>
+                <input type="radio" id="male" name="gender" value="male">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female">
+                <label for="female">Female</label>
+
+                <label style="padding-left: 75px;" for="relationship_status">Relationship Status:</label>
+                <select name="relationship_status" id="relationship_status">
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                </select>
+                <label style="padding-left: 75px;" for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob">
+            </fieldset>
+        </div>
+        <br><br><br>
+
+        <!-- education -->
+        <div id="education_details">
+            <fieldset>
+                <div id="education_container">
+                    <legend style="font-size: larger;">Education Details : <button type="button"
+                            onclick="addEducation()">Add</button><button type="button"
+                            onclick="removeEducation()">Remove</button>
+                    </legend>
+                    <br>
+                    <label for="course_1">Course:</label>
+                    <input type="text" id="course_1" name="course"><br><br>
+                    <label for="passing_year_1">Passing Year:</label>
+                    <input type="number" id="passing_year_1" name="passing_year_1">
+                    <label style="padding-left: 40px;" for="uni_board_1">University/Board:</label>
+                    <input type="text" id="uni_board_1" name="uni_board_1">
+                    <label style="padding-left: 40px;" for="percentage_1">Percentage:</label>
+                    <input type="number" id="percentage_1" name="percentage_1" step="0.01">
+                </div>
+            </fieldset>
+        </div> <br><br><br>
+
+        <!-- experience -->
+        <div id="experience">
+            <fieldset>
+                <div id="experience_container">
+                    <legend style="font-size: larger;">Experience Details : <button type="button"
+                            onclick="addExperience()">Add</button><button type="button"
+                            onclick="removeExperience()">Remove</button>
+                    </legend><br>
+                    <label for="company_1">Company:</label>
+                    <input type="text" id="company_1" name="company_1">
+                    <label style="padding-left: 75px;" for="designation_1">Designation:</label>
+                    <input type="text" id="designation_1" name="designation_1">
+                    <label style="padding-left: 75px;" for="from_1">From:</label>
+                    <input type="date" id="from_1" name="from_1">
+                    <label style="padding-left: 75px;" for="to_1">To:</label>
+                    <input type="date" id="to_1" name="to_1">
+                    <label style="padding-left: 75px;" for="annual_package">Annual Package:</label><br><br>
+                    <input type="number" id="annual_package" name="annual_package" step="0.01">
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</body>
+
+</html>
