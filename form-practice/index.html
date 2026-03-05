@@ -10,7 +10,7 @@
 
 <body>
     <h1 style="display: flex; justify-content: center;">Form Practice</h1>
-    <form>
+    <form onsubmit="return validateForm()">
 
         <!-- basic details -->
         <div id="basic_details">
@@ -207,6 +207,7 @@
                     <option value="analyst">Analyst</option>
                 </select>
             </fieldset>
+            <button type="submit">submit</button>
     </form>
 </body>
 
