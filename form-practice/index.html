@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -118,7 +118,7 @@
                     <input type="date" id="to_1" name="to_1">
                     <label id="reason_to_leave_label_1" style="padding-left: 75px;" for="reason_to_leave_1">Reason for
                         Leaving:</label>
-                    <input type="text" name="reason_to_leave_1" id="reason_to_leave_1"></input><br><br>
+                    <input type="text" name="reason_to_leave_1" id="reason_to_leave_1"><br><br>
                     <label id="ref_contact_label_1" for="ref_contact_1">Referral Contact:</label>
                     <input type="text" id="ref_contact_1" name="ref_contact_1">
                     <label id="ref_name_label_1" style="padding-left: 75px;" for="ref_name_1">Referral Name:</label>
@@ -137,13 +137,11 @@
                 </div>
                 <div id="languages_list">
                     <label for="english">English</label>
-                    <input type="checkbox" id="english" name="english" value="English" onclick="checkBox(this)">
-                    </input><br>
+                    <input type="checkbox" id="english" name="english" value="English" onclick="checkBox(this)"><br>
                     <label for="hindi">Hindi</label>
-                    <input type="checkbox" id="hindi" name="hindi" value="Hindi" onclick="checkBox(this)"> </input><br>
+                    <input type="checkbox" id="hindi" name="hindi" value="Hindi" onclick="checkBox(this)"><br>
                     <label for="gujarati">Gujarati</label>
-                    <input type="checkbox" id="gujarati" name="gujarati" value="Gujarati" onclick="checkBox(this)">
-                    </input><br>
+                    <input type="checkbox" id="gujarati" name="gujarati" value="Gujarati" onclick="checkBox(this)"><br>
                 </div>
             </fieldset>
         </div><br><br><br>
@@ -158,16 +156,13 @@
                 </div>
                 <div id="technologies_list">
                     <label for="php">PHP</label>
-                    <input type="checkbox" id="php" name="php" value="PHP" onclick="radioButton(this)"> </input><br>
+                    <input type="checkbox" id="php" name="php" value="PHP" onclick="radioButton(this)"><br>
                     <label for="MySQL">MySQL</label>
-                    <input type="checkbox" id="MySQL" name="MySQL" value="MySQL" onclick="radioButton(this)">
-                    </input><br>
+                    <input type="checkbox" id="MySQL" name="MySQL" value="MySQL" onclick="radioButton(this)"><br>
                     <label for="Laravel">Laravel</label>
-                    <input type="checkbox" id="Laravel" name="Laravel" value="Laravel" onclick="radioButton(this)">
-                    </input><br>
+                    <input type="checkbox" id="Laravel" name="Laravel" value="Laravel" onclick="radioButton(this)"><br>
                     <label for="oracle">Oracle</label>
-                    <input type="checkbox" id="oracle" name="oracle" value="Oracle" onclick="radioButton(this)">
-                    </input><br>
+                    <input type="checkbox" id="oracle" name="oracle" value="Oracle" onclick="radioButton(this)"><br>
                 </div>
             </fieldset>
         </div><br><br><br>
@@ -176,7 +171,7 @@
         <div id="reference_contact">
             <fieldset>
                 <legend style="font-size: xx-large;">Reference Contact</legend>
-                <label for="ref_name_1">Name:</label>
+                <label for="ref_name">Name:</label>
                 <input type="text" id="ref_name" name="ref_name">
                 <label style="padding-left: 75px;" for="ref_email">Email:</label>
                 <input type="email" id="ref_email" name="ref_email">
@@ -208,7 +203,7 @@
                 </select>
             </fieldset>
             <button type="submit">submit</button>
+        </div>
     </form>
 </body>
-
 </html>
