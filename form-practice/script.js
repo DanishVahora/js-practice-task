@@ -4,7 +4,7 @@ let languageIndex = 4;
 let technologyIndex = 5;
 
 function addEducation() {
-    document.getElementById("education_container").innerHTML += `<hr id="hr_${education_index}"/>
+    document.getElementById("education_container").insertAdjacentHTML("beforeend", `<hr id="hr_${education_index}"/>
                     <label id="course_label_${education_index}" for="course_${education_index}">Course:</label>
                     <input type="text" id="course_${education_index}" name="course"><br><br>
                     <label id="passing_year_label_${education_index}" for="passing_year_${education_index}">Passing Year:</label>
@@ -12,7 +12,7 @@ function addEducation() {
                     <label id="uni_board_label_${education_index}" style="padding-left: 40px;" for="uni_board_${education_index}">University/Board:</label>
                     <input type="text" id="uni_board_${education_index}" name="uni_board_${education_index}">
                     <label id="percentage_label_${education_index}" style="padding-left: 40px;" for="percentage_${education_index}">Percentage:</label>
-                    <input type="number" id="percentage_${education_index}" name="percentage_${education_index}" step="0.01">`;
+                    <input type="number" id="percentage_${education_index}" name="percentage_${education_index}" step="0.01">`);
     education_index++;
 }
 
@@ -36,7 +36,7 @@ function removeEducation() {
 }
 
 function addExperience() {
-    document.getElementById("experience_container").innerHTML += `<hr id="hr_exp_${experience_index}"/>
+    document.getElementById("experience_container").insertAdjacentHTML("beforeend", `<hr id="hr_exp_${experience_index}"/>
                     <label id="company_label_${experience_index}" for="company_${experience_index}">Company:</label>
                     <input type="text" id="company_${experience_index}" name="company_${experience_index}">
                     <label id="designation_label_${experience_index}" style="padding-left: 75px;" for="designation_${experience_index}">Designation:</label>
@@ -46,13 +46,13 @@ function addExperience() {
                     <label id="from_label_${experience_index}" for="from_${experience_index}">From:</label>
                     <input type="date" id="from_${experience_index}" name="from_${experience_index}">
                     <label id="to_label_${experience_index}" style="padding-left: 75px;" for="to_${experience_index}">To:</label>
-                    <input type="date" id="to_${experience_index}" name="to_${experience_index}"> 
+                    <input type="date" id="to_${experience_index}" name="to_${experience_index}">
                     <label id="reason_to_leave_label_${experience_index}" style="padding-left: 75px;" for="reason_to_leave_${experience_index}">Reason for Leaving:</label>
-                    <input type="text" name="reason_to_leave_${experience_index}" id="reason_to_leave_${experience_index}"></input><br><br>
+                    <input type="text" name="reason_to_leave_${experience_index}" id="reason_to_leave_${experience_index}"><br><br>
                     <label id="ref_contact_label_${experience_index}" for="ref_contact_${experience_index}">Referral Contact:</label>
                     <input type="text" id="ref_contact_${experience_index}" name="ref_contact_${experience_index}">
                     <label id="ref_name_label_${experience_index}" style="padding-left: 75px;" for="ref_name_${experience_index}">Referral Name:</label>
-                    <input type="text" id="ref_name_${experience_index}" name="ref_name_${experience_index}">`;
+                    <input type="text" id="ref_name_${experience_index}" name="ref_name_${experience_index}">`);
     experience_index++;
 }
 
@@ -94,34 +94,38 @@ function checkBox(checkbox) {
             checkbox.insertAdjacentElement("afterend", container);
         }
 
-        container.innerHTML = ` : <input type="checkbox" name="read_${checkbox.id}" id="read_${checkbox.id}">
-                <label id="read_label_${checkbox.id}" for="read_${checkbox.id} value="read">Read</label>
-                <input type="checkbox" name="write_${checkbox.id}" id="write_${checkbox.id}">
-                <label id="write_label_${checkbox.id}" for="write_${checkbox.id} value="write">Write</label>
-                <input type="checkbox" name="speak_${checkbox.id}" id="speak_${checkbox.id}">
-                <label id="speak_label_${checkbox.id}" for="speak_${checkbox.id} value="speak">Speak</label>`;
+        container.innerHTML = ` :
+            <input type="checkbox" name="read_${checkbox.id}" id="read_${checkbox.id}" value="read">
+            <label id="read_label_${checkbox.id}" for="read_${checkbox.id}">Read</label>
+            <input type="checkbox" name="write_${checkbox.id}" id="write_${checkbox.id}" value="write">
+            <label id="write_label_${checkbox.id}" for="write_${checkbox.id}">Write</label>
+            <input type="checkbox" name="speak_${checkbox.id}" id="speak_${checkbox.id}" value="speak">
+            <label id="speak_label_${checkbox.id}" for="speak_${checkbox.id}">Speak</label>`;
     } else {
         container?.remove();
     }
 }
 
-function radioButton(radio) {
-    const containerId = `${radio.id}_skills`;
+function radioButton(checkbox) {
+    const containerId = `${checkbox.id}_skills`;
     let container = document.getElementById(containerId);
 
-    if (radio.checked) {
+    if (checkbox.checked) {
         if (!container) {
             container = document.createElement("span");
             container.id = containerId;
-            radio.insertAdjacentElement("afterend", container);
+            checkbox.insertAdjacentElement("afterend", container);
         }
 
-        container.innerHTML = ` : <input type="radio" name="beginner_${radio.name}" id="beginner_${radio.id}" value="beginner">
-                <label id="beginner_label_${radio.id}" for="beginner_${radio.id}">Beginner</label>
-                <input type="radio" name="intermediate_${radio.name}" id="intermediate_${radio.id}" value="intermediate">
-                <label id="intermediate_label_${radio.id}" for="intermediate_${radio.id}">Intermediate</label>
-                <input type="radio" name="expert_${radio.name}" id="expert_${radio.id}" value="expert">
-                <label id="expert_label_${radio.id}" for="expert_${radio.id}">Expert</label>`;
+        const groupName = `tech_level_${checkbox.id}`;
+
+        container.innerHTML = ` :
+            <input type="radio" name="${groupName}" id="beginner_${checkbox.id}" value="beginner">
+            <label id="beginner_label_${checkbox.id}" for="beginner_${checkbox.id}">Beginner</label>
+            <input type="radio" name="${groupName}" id="intermediate_${checkbox.id}" value="intermediate">
+            <label id="intermediate_label_${checkbox.id}" for="intermediate_${checkbox.id}">Intermediate</label>
+            <input type="radio" name="${groupName}" id="expert_${checkbox.id}" value="expert">
+            <label id="expert_label_${checkbox.id}" for="expert_${checkbox.id}">Expert</label>`;
     } else {
         container?.remove();
     }
@@ -138,7 +142,7 @@ function addLanguage() {
     const id = `language_${languageIndex++}`;
     const wrapper = document.createElement("div");
     wrapper.innerHTML = `<label for="${id}">${name}</label>
-                    <input type="checkbox" id="${id}" name="${id}" value="${name}" onclick="checkBox(this)"> </input><br>`;
+                    <input type="checkbox" id="${id}" name="${id}" value="${name}" onclick="checkBox(this)"><br>`;
 
     document.getElementById("languages_list").appendChild(wrapper);
     input.value = "";
@@ -155,7 +159,7 @@ function addTechnology() {
     const id = `technology_${technologyIndex++}`;
     const wrapper = document.createElement("div");
     wrapper.innerHTML = `<label for="${id}">${name}</label>
-                    <input type="checkbox" id="${id}" name="${id}" value="${name}" onclick="radioButton(this)"> </input><br>`;
+                    <input type="checkbox" id="${id}" name="${id}" value="${name}" onclick="radioButton(this)"><br>`;
 
     document.getElementById("technologies_list").appendChild(wrapper);
     input.value = "";
@@ -202,30 +206,53 @@ function validateForm() {
     const today = new Date();
     if (dobDate >= today) { alert("Date of Birth must be in the past"); return false; }
 
-    const course = document.getElementById("course_1").value;
-    const passingYear = document.getElementById("passing_year_1").value;
-    const uniBoard = document.getElementById("uni_board_1").value;
-    const percentage = document.getElementById("percentage_1").value;
+    // Education validation (all rows)
+    for (let i = 1; i < education_index; i++) {
+        const courseEl = document.getElementById(`course_${i}`);
+        const passingYearEl = document.getElementById(`passing_year_${i}`);
+        const uniBoardEl = document.getElementById(`uni_board_${i}`);
+        const percentageEl = document.getElementById(`percentage_${i}`);
 
-    if (isEmpty(course)) { alert("Course is required"); return false; }
-    if (isEmpty(passingYear) || passingYear < 1900 || passingYear > new Date().getFullYear()) {
-        alert("Enter a valid passing year"); return false;
+        if (!courseEl || !passingYearEl || !uniBoardEl || !percentageEl) continue;
+
+        const course = courseEl.value;
+        const passingYear = passingYearEl.value;
+        const uniBoard = uniBoardEl.value;
+        const percentage = percentageEl.value;
+
+        if (isEmpty(course)) { alert(`Course is required (Education ${i})`); return false; }
+        if (isEmpty(passingYear) || passingYear < 1900 || passingYear > new Date().getFullYear()) {
+            alert(`Enter a valid passing year (Education ${i})`); return false;
+        }
+        if (isEmpty(uniBoard)) { alert(`University/Board is required (Education ${i})`); return false; }
+        if (isEmpty(percentage) || percentage < 0 || percentage > 100) {
+            alert(`Enter a valid percentage 0-100 (Education ${i})`); return false;
+        }
     }
-    if (isEmpty(uniBoard)) { alert("University/Board is required"); return false; }
-    if (isEmpty(percentage) || percentage < 0 || percentage > 100) { alert("Enter a valid percentage (0-100)"); return false; }
 
-    const company = document.getElementById("company_1").value;
-    const expDesignation = document.getElementById("designation_1").value;
-    const annualPackage = document.getElementById("annual_package_1").value;
-    const fromDate = document.getElementById("from_1").value;
-    const toDate = document.getElementById("to_1").value;
+    // Experience validation (all rows)
+    for (let i = 1; i < experience_index; i++) {
+        const companyEl = document.getElementById(`company_${i}`);
+        const designationEl = document.getElementById(`designation_${i}`);
+        const annualPackageEl = document.getElementById(`annual_package_${i}`);
+        const fromEl = document.getElementById(`from_${i}`);
+        const toEl = document.getElementById(`to_${i}`);
 
-    if (isEmpty(company)) { alert("Company is required"); return false; }
-    if (isEmpty(expDesignation)) { alert("Experience designation is required"); return false; }
-    if (isEmpty(annualPackage) || annualPackage < 0) { alert("Enter a valid annual package"); return false; }
-    if (isEmpty(fromDate)) { alert("Experience start date is required"); return false; }
-    if (isEmpty(toDate)) { alert("Experience end date is required"); return false; }
-    if (new Date(fromDate) > new Date(toDate)) { alert("From date cannot be after To date"); return false; }
+        if (!companyEl || !designationEl || !annualPackageEl || !fromEl || !toEl) continue;
+
+        const company = companyEl.value;
+        const expDesignation = designationEl.value;
+        const annualPackage = annualPackageEl.value;
+        const fromDate = fromEl.value;
+        const toDate = toEl.value;
+
+        if (isEmpty(company)) { alert(`Company is required (Experience ${i})`); return false; }
+        if (isEmpty(expDesignation)) { alert(`Designation is required (Experience ${i})`); return false; }
+        if (isEmpty(annualPackage) || annualPackage < 0) { alert(`Enter a valid annual package (Experience ${i})`); return false; }
+        if (isEmpty(fromDate)) { alert(`From date is required (Experience ${i})`); return false; }
+        if (isEmpty(toDate)) { alert(`To date is required (Experience ${i})`); return false; }
+        if (new Date(fromDate) > new Date(toDate)) { alert(`From date cannot be after To date (Experience ${i})`); return false; }
+    }
 
     const languageCheckboxes = document.querySelectorAll("#languages_list input[type='checkbox']");
     const languageSelected = Array.from(languageCheckboxes).some(cb => cb.checked);
@@ -234,6 +261,17 @@ function validateForm() {
     const techCheckboxes = document.querySelectorAll("#technologies_list input[type='checkbox']");
     const techSelected = Array.from(techCheckboxes).some(cb => cb.checked);
     if (!techSelected) { alert("Select at least one technology"); return false; }
+
+    // Validate technology level selection
+    const techChecked = Array.from(techCheckboxes).filter(cb => cb.checked);
+    for (const cb of techChecked) {
+        const groupName = `tech_level_${cb.id}`;
+        const levelChosen = document.querySelector(`input[name="${groupName}"]:checked`);
+        if (!levelChosen) {
+            alert(`Select level (Beginner/Intermediate/Expert) for ${cb.value}`);
+            return false;
+        }
+    }
 
     const refName = document.getElementById("ref_name").value;
     const refEmail = document.getElementById("ref_email").value;
@@ -247,9 +285,9 @@ function validateForm() {
     const currentSalary = document.getElementById("current_salary").value;
     const noticePeriod = document.getElementById("notice_period").value;
 
-    if (expectedSalary < 0) { alert("Expected salary must be positive"); return false; }
-    if (currentSalary < 0) { alert("Current salary must be positive"); return false; }
-    if (noticePeriod < 0) { alert("Notice period must be positive"); return false; }
+    if (expectedSalary !== "" && expectedSalary < 0) { alert("Expected salary must be positive"); return false; }
+    if (currentSalary !== "" && currentSalary < 0) { alert("Current salary must be positive"); return false; }
+    if (noticePeriod !== "" && noticePeriod < 0) { alert("Notice period must be positive"); return false; }
 
     window.print();
     return true;
