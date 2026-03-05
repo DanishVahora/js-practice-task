@@ -161,3 +161,96 @@ function addTechnology() {
     input.value = "";
 }
 
+function validateForm() {
+    function isEmpty(value) {
+        return value.trim() === "";
+    }
+
+    const fname = document.getElementById("fname").value;
+    const lname = document.getElementById("lname").value;
+    const designation = document.getElementById("designation").value;
+    const email = document.getElementById("email").value;
+    const mobile = document.getElementById("mobile_number").value;
+    const address1 = document.getElementById("adress_1").value;
+    const city = document.getElementById("city").value;
+    const state = document.getElementById("state").value;
+    const pincode = document.getElementById("pincode").value;
+    const dob = document.getElementById("dob").value;
+
+    if (isEmpty(fname)) { alert("First name is required"); return false; }
+    if (isEmpty(lname)) { alert("Last name is required"); return false; }
+    if (isEmpty(designation)) { alert("Designation is required"); return false; }
+    if (isEmpty(email)) { alert("Email is required"); return false; }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) { alert("Invalid email format"); return false; }
+
+    const mobilePattern = /^\d{10}$/;
+    if (!mobilePattern.test(mobile)) { alert("Mobile number must be 10 digits"); return false; }
+
+    if (isEmpty(address1)) { alert("Address 1 is required"); return false; }
+    if (isEmpty(city)) { alert("City is required"); return false; }
+    if (isEmpty(pincode)) { alert("Pincode is required"); return false; }
+    if (isNaN(pincode) || pincode.length !== 6) { alert("Pincode must be a 6-digit number"); return false; }
+
+    const genderMale = document.getElementById("male").checked;
+    const genderFemale = document.getElementById("female").checked;
+    if (!genderMale && !genderFemale) { alert("Please select your gender"); return false; }
+
+    if (isEmpty(dob)) { alert("Date of Birth is required"); return false; }
+    const dobDate = new Date(dob);
+    const today = new Date();
+    if (dobDate >= today) { alert("Date of Birth must be in the past"); return false; }
+
+    const course = document.getElementById("course_1").value;
+    const passingYear = document.getElementById("passing_year_1").value;
+    const uniBoard = document.getElementById("uni_board_1").value;
+    const percentage = document.getElementById("percentage_1").value;
+
+    if (isEmpty(course)) { alert("Course is required"); return false; }
+    if (isEmpty(passingYear) || passingYear < 1900 || passingYear > new Date().getFullYear()) {
+        alert("Enter a valid passing year"); return false;
+    }
+    if (isEmpty(uniBoard)) { alert("University/Board is required"); return false; }
+    if (isEmpty(percentage) || percentage < 0 || percentage > 100) { alert("Enter a valid percentage (0-100)"); return false; }
+
+    const company = document.getElementById("company_1").value;
+    const expDesignation = document.getElementById("designation_1").value;
+    const annualPackage = document.getElementById("annual_package_1").value;
+    const fromDate = document.getElementById("from_1").value;
+    const toDate = document.getElementById("to_1").value;
+
+    if (isEmpty(company)) { alert("Company is required"); return false; }
+    if (isEmpty(expDesignation)) { alert("Experience designation is required"); return false; }
+    if (isEmpty(annualPackage) || annualPackage < 0) { alert("Enter a valid annual package"); return false; }
+    if (isEmpty(fromDate)) { alert("Experience start date is required"); return false; }
+    if (isEmpty(toDate)) { alert("Experience end date is required"); return false; }
+    if (new Date(fromDate) > new Date(toDate)) { alert("From date cannot be after To date"); return false; }
+
+    const languageCheckboxes = document.querySelectorAll("#languages_list input[type='checkbox']");
+    const languageSelected = Array.from(languageCheckboxes).some(cb => cb.checked);
+    if (!languageSelected) { alert("Select at least one language"); return false; }
+
+    const techCheckboxes = document.querySelectorAll("#technologies_list input[type='checkbox']");
+    const techSelected = Array.from(techCheckboxes).some(cb => cb.checked);
+    if (!techSelected) { alert("Select at least one technology"); return false; }
+
+    const refName = document.getElementById("ref_name").value;
+    const refEmail = document.getElementById("ref_email").value;
+    const refPhone = document.getElementById("ref_phone").value;
+
+    if (isEmpty(refName)) { alert("Reference name is required"); return false; }
+    if (isEmpty(refEmail) || !emailPattern.test(refEmail)) { alert("Valid reference email is required"); return false; }
+    if (isEmpty(refPhone) || !mobilePattern.test(refPhone)) { alert("Reference phone number must be 10 digits"); return false; }
+
+    const expectedSalary = document.getElementById("expected_salary").value;
+    const currentSalary = document.getElementById("current_salary").value;
+    const noticePeriod = document.getElementById("notice_period").value;
+
+    if (expectedSalary < 0) { alert("Expected salary must be positive"); return false; }
+    if (currentSalary < 0) { alert("Current salary must be positive"); return false; }
+    if (noticePeriod < 0) { alert("Notice period must be positive"); return false; }
+
+    window.print();
+    return true;
+}
