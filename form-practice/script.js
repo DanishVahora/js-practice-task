@@ -12,9 +12,23 @@ function addEducation() {
                     <label id="uni_board_label_${education_index}" style="padding-left: 40px;" for="uni_board_${education_index}">University/Board:</label>
                     <input type="text" id="uni_board_${education_index}" name="uni_board_${education_index}">
                     <label id="percentage_label_${education_index}" style="padding-left: 40px;" for="percentage_${education_index}">Percentage:</label>
-                    <input type="number" id="percentage_${education_index}" name="percentage_${education_index}" step="0.01">`);
+                    <input type="number" id="percentage_${education_index}" name="percentage_${education_index}" step="0.01">
+                    <button type="button" id="remove_edu_${education_index}" onclick="removeEducationId(${education_index})">X</button>`);
+                    
     education_index++;
 }
+function removeEducationId(index){
+    document.getElementById(`hr_${index}`)?.remove();
+    document.getElementById(`passing_year_label_${index}`)?.remove();
+    document.getElementById(`uni_board_label_${index}`)?.remove();
+    document.getElementById(`percentage_label_${index}`)?.remove();
+    document.getElementById(`course_label_${index}`)?.remove();
+    document.getElementById(`course_${index}`)?.remove();
+    document.getElementById(`passing_year_${index}`)?.remove();
+    document.getElementById(`uni_board_${index}`)?.remove();
+    document.getElementById(`percentage_${index}`)?.remove();
+    document.getElementById(`remove_edu_${index}`)?.remove();
+}         
 
 function removeEducation() {
     if (education_index <= 2) {
@@ -31,6 +45,7 @@ function removeEducation() {
     document.getElementById(`passing_year_${lastIndex}`)?.remove();
     document.getElementById(`uni_board_${lastIndex}`)?.remove();
     document.getElementById(`percentage_${lastIndex}`)?.remove();
+    document.getElementById(`remove_edu_${lastIndex}`)?.remove();
 
     education_index--;
 }
@@ -52,9 +67,33 @@ function addExperience() {
                     <label id="ref_contact_label_${experience_index}" for="ref_contact_${experience_index}">Referral Contact:</label>
                     <input type="text" id="ref_contact_${experience_index}" name="ref_contact_${experience_index}">
                     <label id="ref_name_label_${experience_index}" style="padding-left: 75px;" for="ref_name_${experience_index}">Referral Name:</label>
-                    <input type="text" id="ref_name_${experience_index}" name="ref_name_${experience_index}">`);
+                    <input type="text" id="ref_name_${experience_index}" name="ref_name_${experience_index}">
+                    <button type="button" id="remove_exp_${experience_index}" onclick="removeExperienceId(${experience_index})">X</button>
+                    `);
     experience_index++;
 }
+
+function removeExperienceId(index){
+    document.getElementById(`hr_exp_${index}`)?.remove();
+    document.getElementById(`company_label_${index}`)?.remove();
+    document.getElementById(`designation_label_${index}`)?.remove();
+    document.getElementById(`annual_package_label_${index}`)?.remove();
+    document.getElementById(`from_label_${index}`)?.remove();
+    document.getElementById(`to_label_${index}`)?.remove();
+    document.getElementById(`reason_to_leave_label_${index}`)?.remove();
+    document.getElementById(`ref_contact_label_${index}`)?.remove();
+    document.getElementById(`ref_name_label_${index}`)?.remove();
+    document.getElementById(`company_${index}`)?.remove();
+    document.getElementById(`designation_${index}`)?.remove();
+    document.getElementById(`annual_package_${index}`)?.remove();
+    document.getElementById(`from_${index}`)?.remove();
+    document.getElementById(`to_${index}`)?.remove();
+    document.getElementById(`reason_to_leave_${index}`)?.remove();
+    document.getElementById(`ref_contact_${index}`)?.remove();
+    document.getElementById(`ref_name_${index}`)?.remove();
+    document.getElementById(`remove_exp_${index}`)?.remove();
+}   
+
 
 function removeExperience() {
     if (experience_index <= 2) {
@@ -79,7 +118,7 @@ function removeExperience() {
     document.getElementById(`reason_to_leave_${lastIndex}`)?.remove();
     document.getElementById(`ref_contact_${lastIndex}`)?.remove();
     document.getElementById(`ref_name_${lastIndex}`)?.remove();
-
+    document.getElementById(`remove_exp_${lastIndex}`)?.remove();
     experience_index--;
 }
 
@@ -142,10 +181,23 @@ function addLanguage() {
     const id = `language_${languageIndex++}`;
     const wrapper = document.createElement("div");
     wrapper.innerHTML = `<label for="${id}">${name}</label>
-                    <input type="checkbox" id="${id}" name="${id}" value="${name}" onclick="checkBox(this)"><br>`;
+                    <input type="checkbox" id="${id}" name="${id}" value="${name}" onclick="checkBox(this)">
+                    <button type="button" id="remove_lang_${languageIndex - 1}" onclick="removeLanguageId(${languageIndex - 1})">X</button>
+                    <br>`;
 
     document.getElementById("languages_list").appendChild(wrapper);
     input.value = "";
+}
+
+function removeLanguageId(index) {
+    document.getElementById(`read_label_language_${index}`)?.remove(); 
+    document.getElementById(`write_label_language_${index}`)?.remove();
+    document.getElementById(`speak_label_language_${index}`)?.remove();
+    document.getElementById(`read_language_${index}`)?.remove();
+    document.getElementById(`write_language_${index}`)?.remove();
+    document.getElementById(`speak_language_${index}`)?.remove();
+    document.getElementById(`remove_lang_${index}`)?.remove();
+    document.getElementById(`language_${index}`)?.remove();
 }
 
 function addTechnology() {
@@ -176,10 +228,11 @@ function validateForm() {
     const email = document.getElementById("email").value;
     const mobile = document.getElementById("mobile_number").value;
     const address1 = document.getElementById("adress_1").value;
+    const address2 = document.getElementById("adress_2").value;
     const city = document.getElementById("city").value;
     const state = document.getElementById("state").value;
     const pincode = document.getElementById("pincode").value;
-    const dob = document.getElementById("dob").value;
+    const dob = document.getElementById("dob").value; 
 
     if (isEmpty(fname)) { alert("First name is required"); return false; }
     if (isEmpty(lname)) { alert("Last name is required"); return false; }
@@ -289,6 +342,114 @@ function validateForm() {
     if (currentSalary !== "" && currentSalary < 0) { alert("Current salary must be positive"); return false; }
     if (noticePeriod !== "" && noticePeriod < 0) { alert("Notice period must be positive"); return false; }
 
-    window.print();
+    submitForm();
     return true;
+}
+
+async function submitForm() {
+
+    const data = {
+        first_name: document.getElementById("fname").value,
+        last_name: document.getElementById("lname").value,
+        designation: document.getElementById("designation").value,
+        email: document.getElementById("email").value,
+        mobile: document.getElementById("mobile_number").value,
+
+        address1: document.getElementById("adress_1").value,
+        address2: document.getElementById("adress_2").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        pincode: document.getElementById("pincode").value,
+
+        gender: document.querySelector('input[name="gender"]:checked').value,
+        relationship: document.getElementById("relationship_status").value,
+        dob: document.getElementById("dob").value,
+
+        education: [],
+        experience: [],
+        languages: [],
+        technologies: [],
+
+        reference: {
+            name: document.getElementById("ref_name").value,
+            email: document.getElementById("ref_email").value,
+            phone: document.getElementById("ref_phone").value
+        },
+
+        preferences: {
+            expected_salary: document.getElementById("expected_salary").value,
+            current_salary: document.getElementById("current_salary").value,
+            notice_period: document.getElementById("notice_period").value,
+            preferred_role: document.getElementById("preferred_role").value
+        }
+    };
+
+    for (let i = 1; i < education_index; i++) {
+
+        const course = document.getElementById(`course_${i}`);
+        if (!course) continue;
+
+        data.education.push({
+            course: course.value,
+            year: document.getElementById(`passing_year_${i}`).value,
+            board: document.getElementById(`uni_board_${i}`).value,
+            percentage: document.getElementById(`percentage_${i}`).value
+        });
+    }
+
+    for (let i = 1; i < experience_index; i++) {
+
+        const company = document.getElementById(`company_${i}`);
+        if (!company) continue;
+
+        data.experience.push({
+            company: company.value,
+            designation: document.getElementById(`designation_${i}`).value,
+            salary: document.getElementById(`annual_package_${i}`).value,
+            from: document.getElementById(`from_${i}`).value,
+            to: document.getElementById(`to_${i}`).value,
+            reason: document.getElementById(`reason_to_leave_${i}`).value,
+            contact: document.getElementById(`ref_contact_${i}`).value,
+            name: document.getElementById(`ref_name_${i}`).value
+        });
+    }
+
+    const languageCheckboxes = document.querySelectorAll("#languages_list input[type='checkbox']");
+
+    languageCheckboxes.forEach(cb => {
+        if (cb.checked) {
+
+            data.languages.push({
+                name: cb.value,
+                read: document.getElementById(`read_${cb.id}`)?.checked || false,
+                write: document.getElementById(`write_${cb.id}`)?.checked || false,
+                speak: document.getElementById(`speak_${cb.id}`)?.checked || false
+            });
+        }
+    });
+
+    const techCheckboxes = document.querySelectorAll("#technologies_list input[type='checkbox']");
+
+    techCheckboxes.forEach(cb => {
+        if (cb.checked) {
+
+            const level = document.querySelector(`input[name="tech_level_${cb.id}"]:checked`);
+
+            data.technologies.push({
+                name: cb.value,
+                level: level ? level.value : null
+            });
+        }
+    });
+
+    const response = await fetch("http://localhost:3000/submit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.text();
+    alert(result);
 }

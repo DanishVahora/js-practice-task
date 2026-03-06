@@ -92,6 +92,8 @@
                     <input type="text" id="uni_board_1" name="uni_board_1">
                     <label style="padding-left: 40px;" for="percentage_1">Percentage:</label>
                     <input type="number" id="percentage_1" name="percentage_1" step="0.01">
+                    <button type="button" id="remove_edu_1" onclick="removeEducationId(1)">X</button>
+
                 </div>
             </fieldset>
         </div> <br><br><br>
@@ -123,6 +125,8 @@
                     <input type="text" id="ref_contact_1" name="ref_contact_1">
                     <label id="ref_name_label_1" style="padding-left: 75px;" for="ref_name_1">Referral Name:</label>
                     <input type="text" id="ref_name_1" name="ref_name_1">
+                    <button type="button" id="remove_exp_1" onclick="removeExperienceId(1)">X</button>
+
                 </div>
             </fieldset>
         </div><br><br><br>
@@ -141,7 +145,9 @@
                     <label for="hindi">Hindi</label>
                     <input type="checkbox" id="hindi" name="hindi" value="Hindi" onclick="checkBox(this)"><br>
                     <label for="gujarati">Gujarati</label>
-                    <input type="checkbox" id="gujarati" name="gujarati" value="Gujarati" onclick="checkBox(this)"><br>
+                    <input type="checkbox" id="gujarati" name="gujarati" value="Gujarati" onclick="checkBox(this)">
+                    <button type="button" id="remove_lang_1" onclick="removeLanguageId(1)">X</button>
+                    <br>
                 </div>
             </fieldset>
         </div><br><br><br>

@@ -19,7 +19,9 @@ create table candidates (
  
  gender enum('Male','Female'),
  rlationship_status enum('Single','Married', 'Divorced'),
- dob date
+ dob date,
+
+ created_at timestamp default current_timestamp
 );
 
 
@@ -31,6 +33,8 @@ create table education(
     passing_year int,
     university_board varchar(255),
     percentage decimal(5,2),
+
+    created_at timestamp default current_timestamp,
     
     foreign key(candidate_id)
     references candidates(candidate_id)
@@ -50,6 +54,8 @@ create table experience(
     reason_to_leaving text, 
     referral_contact varchar(50),
     referral_name varchar(100),
+
+    created_at timestamp default current_timestamp,
     
     foreign key(candidate_id)
     references candidates(candidate_id)
@@ -60,6 +66,8 @@ create table experience(
 create table language_known(
 	language_id int auto_increment primary key,    
     language_name varchar(50)
+
+    created_at timestamp default current_timestamp,
 );
 
 
@@ -72,6 +80,8 @@ create table candidate_language(
     can_read boolean,
     can_write boolean, 
     can_speak boolean,
+
+    created_at timestamp default current_timestamp,
     
     foreign key(language_id)
     references language_known(language_id) 
@@ -87,6 +97,8 @@ create table candidate_language(
 create table technology_known(
 	technology_id int auto_increment primary key,    
     technology_name varchar(50) unique
+
+    created_at timestamp default current_timestamp,
 );
 
 
@@ -101,6 +113,8 @@ create table candidate_technology(
     foreign key(technology_id)
     references technology_known(technology_id) 
     on delete cascade,
+
+    created_at timestamp default current_timestamp,
     
     foreign key(candidate_id)
     references candidates(candidate_id)
@@ -116,6 +130,8 @@ create table reference_contact(
     
     email varchar(255),
     phone_number varchar(100),
+
+    created_at timestamp default current_timestamp,
     
     foreign key(candidate_id)
     references candidates(candidate_id)
@@ -131,6 +147,8 @@ create table preferences(
     
     norice_period int,
     preferred_role varchar(100),
+
+    created_at timestamp default current_timestamp,
     
     foreign key (candidate_id)
     references candidates(candidate_id)
@@ -144,6 +162,8 @@ create table location(
     preference_id int not null,
     
     preferred_location varchar(150),
+
+    created_at timestamp default current_timestamp,
     
     foreign key (candidate_id) 
     references candidates(candidate_id)
