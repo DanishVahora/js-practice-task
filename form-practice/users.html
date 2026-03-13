@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Candidates</title>
+    <script src="users.js" defer></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 24px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f4f4f4;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        #edit_section {
+            margin-top: 24px;
+            border: 1px solid #ddd;
+            padding: 16px;
+            display: none;
+        }
+
+        #edit_form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        #edit_form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <a href="index.html">Create Candidate</a>
+        <a href="users.html">Manage Candidates</a>
+    </div>
+
+    <h1>Candidate List</h1>
+    <button type="button" id="refresh_btn">Refresh</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="candidate_rows"></tbody>
+    </table>
+
+    <section id="edit_section">
+        <h2>Edit Candidate</h2>
+        <form id="edit_form">
+            <input type="hidden" id="edit_id">
+
+            <div>
+                <label for="edit_first_name">First Name</label>
+                <input type="text" id="edit_first_name" required>
+            </div>
+            <div>
+                <label for="edit_last_name">Last Name</label>
+                <input type="text" id="edit_last_name" required>
+            </div>
+            <div>
+                <label for="edit_designation">Designation</label>
+                <input type="text" id="edit_designation" required>
+            </div>
+            <div>
+                <label for="edit_email">Email</label>
+                <input type="email" id="edit_email" required>
+            </div>
+            <div>
+                <label for="edit_mobile">Mobile</label>
+                <input type="text" id="edit_mobile" required>
+            </div>
+            <div>
+                <label for="edit_address_1">Address 1</label>
+                <input type="text" id="edit_address_1" required>
+            </div>
+            <div>
+                <label for="edit_address_2">Address 2</label>
+                <input type="text" id="edit_address_2">
+            </div>
+            <div>
+                <label for="edit_city">City</label>
+                <input type="text" id="edit_city" required>
+            </div>
+            <div>
+                <label for="edit_state">State</label>
+                <input type="text" id="edit_state" required>
+            </div>
+            <div>
+                <label for="edit_pincode">Pincode</label>
+                <input type="text" id="edit_pincode" required>
+            </div>
+
+            <div class="full-width actions">
+                <button type="submit">Update</button>
+                <button type="button" id="cancel_edit">Cancel</button>
+            </div>
+        </form>
+    </section>
+</body>
+
+</html>

@@ -2,6 +2,7 @@ let education_index = 2;
 let experience_index = 2;
 let languageIndex = 4;
 let technologyIndex = 5;
+const API_BASE_URL = "http://localhost:3000";
 
 function addEducation() {
     document.getElementById("education_container").insertAdjacentHTML("beforeend", `<hr id="hr_${education_index}"/>
@@ -14,10 +15,10 @@ function addEducation() {
                     <label id="percentage_label_${education_index}" style="padding-left: 40px;" for="percentage_${education_index}">Percentage:</label>
                     <input type="number" id="percentage_${education_index}" name="percentage_${education_index}" step="0.01">
                     <button type="button" id="remove_edu_${education_index}" onclick="removeEducationId(${education_index})">X</button>`);
-                    
+
     education_index++;
 }
-function removeEducationId(index){
+function removeEducationId(index) {
     document.getElementById(`hr_${index}`)?.remove();
     document.getElementById(`passing_year_label_${index}`)?.remove();
     document.getElementById(`uni_board_label_${index}`)?.remove();
@@ -28,7 +29,7 @@ function removeEducationId(index){
     document.getElementById(`uni_board_${index}`)?.remove();
     document.getElementById(`percentage_${index}`)?.remove();
     document.getElementById(`remove_edu_${index}`)?.remove();
-}         
+}
 
 function removeEducation() {
     if (education_index <= 2) {
@@ -73,7 +74,7 @@ function addExperience() {
     experience_index++;
 }
 
-function removeExperienceId(index){
+function removeExperienceId(index) {
     document.getElementById(`hr_exp_${index}`)?.remove();
     document.getElementById(`company_label_${index}`)?.remove();
     document.getElementById(`designation_label_${index}`)?.remove();
@@ -92,7 +93,7 @@ function removeExperienceId(index){
     document.getElementById(`ref_contact_${index}`)?.remove();
     document.getElementById(`ref_name_${index}`)?.remove();
     document.getElementById(`remove_exp_${index}`)?.remove();
-}   
+}
 
 
 function removeExperience() {
@@ -190,7 +191,7 @@ function addLanguage() {
 }
 
 function removeLanguageId(index) {
-    document.getElementById(`read_label_language_${index}`)?.remove(); 
+    document.getElementById(`read_label_language_${index}`)?.remove();
     document.getElementById(`write_label_language_${index}`)?.remove();
     document.getElementById(`speak_label_language_${index}`)?.remove();
     document.getElementById(`read_language_${index}`)?.remove();
@@ -227,12 +228,12 @@ function validateForm() {
     const designation = document.getElementById("designation").value;
     const email = document.getElementById("email").value;
     const mobile = document.getElementById("mobile_number").value;
-    const address1 = document.getElementById("adress_1").value;
-    const address2 = document.getElementById("adress_2").value;
+    const address1 = document.getElementById("address_1").value;
+    const address2 = document.getElementById("address_2").value;
     const city = document.getElementById("city").value;
     const state = document.getElementById("state").value;
     const pincode = document.getElementById("pincode").value;
-    const dob = document.getElementById("dob").value; 
+    const dob = document.getElementById("dob").value;
 
     if (isEmpty(fname)) { alert("First name is required"); return false; }
     if (isEmpty(lname)) { alert("Last name is required"); return false; }
@@ -343,7 +344,7 @@ function validateForm() {
     if (noticePeriod !== "" && noticePeriod < 0) { alert("Notice period must be positive"); return false; }
 
     submitForm();
-    return true;
+    return false;
 }
 
 async function submitForm() {
@@ -355,8 +356,8 @@ async function submitForm() {
         email: document.getElementById("email").value,
         mobile: document.getElementById("mobile_number").value,
 
-        address1: document.getElementById("adress_1").value,
-        address2: document.getElementById("adress_2").value,
+        address1: document.getElementById("address_1").value,
+        address2: document.getElementById("address_2").value,
         city: document.getElementById("city").value,
         state: document.getElementById("state").value,
         pincode: document.getElementById("pincode").value,
@@ -442,7 +443,7 @@ async function submitForm() {
         }
     });
 
-    const response = await fetch("http://localhost:3000/submit", {
+    const response = await fetch(`${API_BASE_URL}/candidates`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -451,5 +452,11 @@ async function submitForm() {
     });
 
     const result = await response.text();
+    if (!response.ok) {
+        alert(result || "Failed to create candidate");
+        return;
+    }
+
     alert(result);
+    document.getElementById("candidate_form").reset();
 }

@@ -1,6 +1,8 @@
-create database job_platform;
 
-use job_platform ;
+
+CREATE DATABASE IF NOT EXISTS job_application;
+
+USE job_application;
 
 
 create table candidates (
@@ -17,8 +19,8 @@ create table candidates (
  state varchar(50),
  pincode varchar(15),
  
- gender enum('Male','Female'),
- rlationship_status enum('Single','Married', 'Divorced'),
+ gender enum('male','female'),
+ relationship_status enum('single','married', 'divorced'),
  dob date,
 
  created_at timestamp default current_timestamp
@@ -65,9 +67,9 @@ create table experience(
 
 create table language_known(
 	language_id int auto_increment primary key,    
-    language_name varchar(50)
+    language_name varchar(50),
 
-    created_at timestamp default current_timestamp,
+    created_at timestamp default current_timestamp
 );
 
 
@@ -96,9 +98,9 @@ create table candidate_language(
 
 create table technology_known(
 	technology_id int auto_increment primary key,    
-    technology_name varchar(50) unique
+    technology_name varchar(50) unique,
 
-    created_at timestamp default current_timestamp,
+    created_at timestamp default current_timestamp
 );
 
 
@@ -118,6 +120,7 @@ create table candidate_technology(
     
     foreign key(candidate_id)
     references candidates(candidate_id)
+    on delete cascade
     
 );
 
@@ -145,7 +148,7 @@ create table preferences(
     cureent_salary decimal(10,2),
     expected_salary decimal(10,2),
     
-    norice_period int,
+    notice_period int,
     preferred_role varchar(100),
 
     created_at timestamp default current_timestamp,

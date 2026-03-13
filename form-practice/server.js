@@ -1,19 +1,20 @@
 const express = require("express")
 const mysql = require("mysql2")
 const cors = require("cors")
+const path = require("path")
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static(__dirname))
 
-/* DATABASE CONNECTION */
 
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
-    database: "job_platform"
+    password: "Root@1234",
+    database: "job_application"
 })
 
 db.connect(err => {
@@ -25,8 +26,6 @@ db.connect(err => {
 })
 
 
-
-/* CREATE */
 
 app.post("/candidates", (req, res) => {
 
@@ -115,7 +114,7 @@ app.put("/candidates/:id", (req, res) => {
 
     const sql = `
     UPDATE candidates
-    SET first_name=?, last_name=?, designation=?, email=?
+    SET first_name=?, last_name=?, designation=?, email=?, mobile_number=?, address_1=?, address_2=?, city=?, state=?, pincode=?
     WHERE candidate_id=?`
 
     db.query(sql,
@@ -124,6 +123,12 @@ app.put("/candidates/:id", (req, res) => {
             data.last_name,
             data.designation,
             data.email,
+            data.mobile,
+            data.address1,
+            data.address2,
+            data.city,
+            data.state,
+            data.pincode,
             id
         ],
         (err, result) => {
