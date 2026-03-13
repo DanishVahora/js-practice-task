@@ -4,160 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pagination Example</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
     <h1>Pagination Example</h1>
     <p>This is a simple pagination example.</p>
-    <center>
-        <!-- <input type="text"><button type="submit">Search</button> -->
-        Sort by <a href="/students?page=1&order=asc">
-            <button type="button"> ↑ </button>
-        </a>
-        :
-        <a href="/students?page=1&order=desc">
-            <button type="button"> ↓ </button>
-        </a>
-    </center>
+
+    <% function sortUrl(column) {
+        const newOrder = (currentSortBy === column && currentOrder === 'asc') ? 'desc' : 'asc';
+        return `/students?page=1&sortBy=${column}&order=${newOrder}`;
+    } %>
+    <% function sortIcon(column) {
+        if (currentSortBy !== column) return '⇅';
+        return currentOrder === 'asc' ? '↑' : '↓';
+    } %>
+
     <table border="1">
         <tr>
-            <th>Id</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
+            <th><a href="<%= sortUrl('id') %>">Id <%= sortIcon('id') %></a></th>
+            <th><a href="<%= sortUrl('fname') %>">First Name <%= sortIcon('fname') %></a></th>
+            <th><a href="<%= sortUrl('lname') %>">Last Name <%= sortIcon('lname') %></a></th>
+            <th><a href="<%= sortUrl('email') %>">Email <%= sortIcon('email') %></a></th>
             <th>Phone Number</th>
             <th>Gender</th>
             <th>DOB</th>
             <th>Address</th>
             <th>City</th>
         </tr>
-        <% students.forEach(student=> { %>
-            <tr>
-                <td>
-                    <%= student.id %>
-                </td>
-                <td>
-                    <%= student.fname %>
-                </td>
-                <td>
-                    <%= student.lname %>
-                </td>
-                <td>
-                    <%= student.email %>
-                </td>
-                <td>
-                    <%= student.phone_number %>
-                </td>
-                <td>
-                    <%= student.gender %>
-                </td>
-                <td>
-                    <%= student.dob.toISOString().split('T')[0] %>
-                </td>
-                <td>
-                    <%= student.address %>
-                </td>
-                <td>
-                    <%= student.city %>
-                </td>
-            </tr>
-            <% }) %>
+        <% students.forEach(student => { %>
+        <tr>
+            <td><%= student.id %></td>
+            <td><%= student.fname %></td>
+            <td><%= student.lname %></td>
+            <td><%= student.email %></td>
+            <td><%= student.phone_number %></td>
+            <td><%= student.gender %></td>
+            <td><%= student.dob.toISOString().split('T')[0] %></td>
+            <td><%= student.address %></td>
+            <td><%= student.city %></td>
+        </tr>
+        <% }) %>
     </table>
+
     <center>
-        <a href="/students?page=<%= currentPage - 1 %>&order=<%= currentOrder %>">
-            <button <% if (currentPage===1) { %> style="pointer-events: none; opacity:0.5;" <% } %>>
-                    Previous
-            </button>
-        </a>
-        <a href="/students?page=<%= currentPage-1%>&order=<%= currentOrder %>">
-            <button <% if (currentPage===1) { %> style="display: none;" <% } %>>
-                    <%= currentPage - 1 %>
-            </button>
-        </a>
-        <a href="/students?page=<%= currentPage %>&order=<%= currentOrder %>">
-            <button>
-                <%= currentPage %>
-            </button>
-        </a>
-        <a href="/students?page=<%= currentPage+1%>&order=<%= currentOrder %>">
-            <button <% if (currentPage===totalPages) { %> style="display: none;" <% } %>>
-                    <%= currentPage + 1 %>
+        <a href="/students?page=<%= currentPage - 1 %>&sortBy=<%= currentSortBy %>&order=<%= currentOrder %>">
+            <button <% if (currentPage === 1) { %> style="pointer-events: none; opacity:0.5;" <% } %>>
+                Previous
             </button>
         </a>
 
-        <a href="/students?page=<%= currentPage + 1 %>&order=<%= currentOrder %>">
-            <button <% if (currentPage===totalPages) { %> style="pointer-events: none;opacity:0.5;" <% } %>>
-                    Next
+        <a href="/students?page=<%= currentPage - 1 %>&sortBy=<%= currentSortBy %>&order=<%= currentOrder %>">
+            <button <% if (currentPage === 1) { %> style="display: none;" <% } %>>
+                <%= currentPage - 1 %>
+            </button>
+        </a>
+
+        <a href="/students?page=<%= currentPage %>&sortBy=<%= currentSortBy %>&order=<%= currentOrder %>">
+            <button><%= currentPage %></button>
+        </a>
+
+        <a href="/students?page=<%= currentPage + 1 %>&sortBy=<%= currentSortBy %>&order=<%= currentOrder %>">
+            <button <% if (currentPage === totalPages) { %> style="display: none;" <% } %>>
+                <%= currentPage + 1 %>
+            </button>
+        </a>
+
+        <a href="/students?page=<%= currentPage + 1 %>&sortBy=<%= currentSortBy %>&order=<%= currentOrder %>">
+            <button <% if (currentPage === totalPages) { %> style="pointer-events: none; opacity:0.5;" <% } %>>
+                Next
             </button>
         </a>
     </center>
 </body>
 
 </html>
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style src="/style.css" ></style>
-</head>
-
-<body>
-    <h1>Pagination Example</h1>
-    <p>This is a simple pagination example.</p>
-
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-        </tr>
-        <% students.forEach(student=> { %>
-            <tr>
-                <td>
-                    <%= student.id %>
-                </td>
-                <td>
-                    <%= student.name %>
-                </td>
-            </tr>
-            <% }) %>
-    </table>
-
-    <div class="pagination">
-        <a href="/students?page=<%= currentPage - 1 %>">
-            <button <% if (currentPage===1) { %> style="pointer-events: none; opacity:0.5;" <% } %>>
-                    Previous
-            </button>
-        </a>
-        <% for (let i=1; i <=totalPages; i++) { %>
-            <a href="/students?page=<%= i %>" <%=i===currentPage ? ''
-                : '' %>>
-                <button>
-                    <%= i %>
-                </button>
-            </a>
-            <% } %>
-                <a href="/students?page=<%= currentPage + 1 %>">
-                    <button <% if (currentPage===totalPages) { %> style="pointer-events: none;opacity:0.5;" <% } %>>
-                            Next
-                    </button>
-                </a>
-
-    </div>
-
-
-
-</body>
-
-</html> -->

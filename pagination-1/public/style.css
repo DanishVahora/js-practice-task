@@ -49,6 +49,19 @@ th {
     text-align: left;
 }
 
+th a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+th a:hover {
+    color: #bdc3c7;
+}
+
 td {
     padding: 10px;
     border-bottom: 1px solid #eee;
