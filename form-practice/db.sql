@@ -22,7 +22,6 @@ create table candidates (
  gender enum('male','female'),
  relationship_status enum('single','married', 'divorced'),
  dob date,
-
  created_at timestamp default current_timestamp
 );
 

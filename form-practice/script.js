@@ -382,7 +382,9 @@ async function submitForm() {
             current_salary: document.getElementById("current_salary").value,
             notice_period: document.getElementById("notice_period").value,
             preferred_role: document.getElementById("preferred_role").value
-        }
+        },
+
+        preferred_locations: Array.from(document.getElementById("job_location").selectedOptions).map(o => o.value)
     };
 
     for (let i = 1; i < education_index; i++) {
