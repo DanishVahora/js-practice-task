@@ -1,8 +1,10 @@
-const API_BASE_URL = "http://localhost:3000";
+
 
 const candidateRows = document.getElementById("candidate_rows");
 const detailSection = document.getElementById("detail_section");
 const editForm = document.getElementById("edit_form");
+
+const API_BASE_URL = (window.API_BASE_URL || "http://localhost:3000").replace(/\/$/, "");
 
 let currentCandidateId = null;
 

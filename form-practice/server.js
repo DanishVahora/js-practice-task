@@ -23,7 +23,7 @@ db.connect(err => {
     console.log("MySQL Connected")
 })
 
-// Helper: promisify db.query
+// promisify db.query
 function query(sql, params) {
     return new Promise((resolve, reject) => {
         db.query(sql, params, (err, result) => {
@@ -33,8 +33,8 @@ function query(sql, params) {
     })
 }
 
-// ─── CANDIDATES ───
-    
+//  CANDIDATES APIS
+
 app.get("/candidates", async (req, res) => {
     try {
         const rows = await query("SELECT * FROM candidates")
@@ -83,6 +83,7 @@ app.get("/candidates/:id", async (req, res) => {
             preferences: preferences[0] || null,
             locations
         })
+        console.log(res)
     } catch (err) {
         console.error(err)
         res.status(500).send("Database error")
@@ -92,7 +93,7 @@ app.get("/candidates/:id", async (req, res) => {
 app.post("/candidates", async (req, res) => {
     try {
         const d = req.body
-        const result = await query( 
+        const result = await query(
             `INSERT INTO candidates
              (first_name,last_name,designation,email,mobile_number,address_1,address_2,city,state,pincode,gender,relationship_status,dob)
              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
