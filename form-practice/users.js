@@ -27,7 +27,7 @@ function formatDate(d) {
 async function loadCandidates() {
     const response = await fetch(`${API_BASE_URL}/candidates`);
     const candidates = await response.json();
-
+    console.log(candidates);
     if (!response.ok) {
         alert("Failed to load candidates");
         return;
@@ -55,6 +55,8 @@ async function loadCandidates() {
     }
 }
 
+//delete
+
 async function deleteCandidate(id) {
     if (!confirm("Delete this candidate? This will also delete all related data.")) return;
     const response = await fetch(`${API_BASE_URL}/candidates/${id}`, { method: "DELETE" });
@@ -68,7 +70,7 @@ async function deleteCandidate(id) {
     await loadCandidates();
 }
 
-// ─── OPEN DETAIL (loads everything) ───
+//  loads everything
 
 async function openDetail(id) {
     currentCandidateId = id;
@@ -78,7 +80,7 @@ async function openDetail(id) {
 
     document.getElementById("detail_title").textContent = `Candidate #${id} - ${data.first_name} ${data.last_name}`;
 
-    // Fill basic edit form
+   
     document.getElementById("edit_id").value = id;
     document.getElementById("edit_first_name").value = data.first_name || "";
     document.getElementById("edit_last_name").value = data.last_name || "";
@@ -106,7 +108,7 @@ async function openDetail(id) {
     detailSection.scrollIntoView({ behavior: "smooth" });
 }
 
-// ─── UPDATE BASIC DETAILS ───
+//  UPDATE   
 
 editForm.addEventListener("submit", async e => {
     e.preventDefault();
@@ -138,7 +140,7 @@ editForm.addEventListener("submit", async e => {
     await openDetail(id);
 });
 
-// ─── EDUCATION ───
+//  EDUCATION 
 
 function renderEducation(list) {
     const container = document.getElementById("education_list");

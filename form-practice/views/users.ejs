@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Candidates</title>
+    <script src="users.js" defer></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 24px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f4f4f4;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .section {
+            margin-top: 24px;
+            border: 1px solid #ddd;
+            padding: 16px;
+            display: none;
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        .edit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .edit-grid label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .sub-section {
+            margin-top: 16px;
+            border: 1px solid #eee;
+            padding: 12px;
+            background: #fafafa;
+        }
+
+        .sub-section h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .inline-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: end;
+            margin-bottom: 12px;
+        }
+
+        .inline-form div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inline-form label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .inline-form input,
+        .inline-form select {
+            padding: 4px 6px;
+        }
+
+        .item-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-row span {
+            font-size: 14px;
+        }
+
+        .item-row button {
+            margin-left: 4px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <% const navLinks=[ { href: '/index' , label: 'Create Candidate' }, { href: '/users' , label: 'Manage Candidates' }
+        ]; const tableHeaders=['ID', 'Name' , 'Designation' , 'Email' , 'Mobile' , 'City' , 'State' , 'Actions' ]; const
+        genderOptions=['male', 'female' ]; const relationshipOptions=['single', 'married' , 'divorced' ]; const
+        techLevelOptions=[ { value: 'Beginner' , label: 'Beginner' }, { value: 'Intermidiate' , label: 'Intermediate' },
+        { value: 'Expert' , label: 'Expert' } ]; %>
+        <div class="nav">
+            <% navLinks.forEach(function (link) { %>
+                <a href="<%= link.href %>">
+                    <%= link.label %>
+                </a>
+                <% }) %>
+        </div>
+
+        <h1>Candidate List</h1>
+        <button type="button" id="refresh_btn">Refresh</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <% tableHeaders.forEach(function (header) { %>
+                        <th>
+                            <%= header %>
+                        </th>
+                        <% }) %>
+                </tr>
+            </thead>
+            <tbody id="candidate_rows"></tbody>
+        </table>
+
+        <!-- Detail / Edit Section -->
+        <section id="detail_section" class="section">
+            <h2 id="detail_title">Candidate Details</h2>
+            <button type="button" id="close_detail">Close</button>
+
+            <!-- Basic Info Edit -->
+            <div class="sub-section">
+                <h3>Basic Details</h3>
+                <form id="edit_form" class="edit-grid">
+                    <input type="hidden" id="edit_id">
+                    <div>
+                        <label for="edit_first_name">First Name</label>
+                        <input type="text" id="edit_first_name" required>
+                    </div>
+                    <div>
+                        <label for="edit_last_name">Last Name</label>
+                        <input type="text" id="edit_last_name" required>
+                    </div>
+                    <div>
+                        <label for="edit_designation">Designation</label>
+                        <input type="text" id="edit_designation" required>
+                    </div>
+                    <div>
+                        <label for="edit_email">Email</label>
+                        <input type="email" id="edit_email" required>
+                    </div>
+                    <div>
+                        <label for="edit_mobile">Mobile</label>
+                        <input type="text" id="edit_mobile" required>
+                    </div>
+                    <div>
+                        <label for="edit_address_1">Address 1</label>
+                        <input type="text" id="edit_address_1">
+                    </div>
+                    <div>
+                        <label for="edit_address_2">Address 2</label>
+                        <input type="text" id="edit_address_2">
+                    </div>
+                    <div>
+                        <label for="edit_city">City</label>
+                        <input type="text" id="edit_city">
+                    </div>
+                    <div>
+                        <label for="edit_state">State</label>
+                        <input type="text" id="edit_state">
+                    </div>
+                    <div>
+                        <label for="edit_pincode">Pincode</label>
+                        <input type="text" id="edit_pincode">
+                    </div>
+                    <div>
+                        <label for="edit_gender">Gender</label>
+                        <select id="edit_gender">
+                            <option value="">--</option>
+                            <% genderOptions.forEach(function (gender) { %>
+                                <option value="<%= gender %>">
+                                    <%= gender.charAt(0).toUpperCase() + gender.slice(1) %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="edit_relationship">Relationship</label>
+                        <select id="edit_relationship">
+                            <option value="">--</option>
+                            <% relationshipOptions.forEach(function (item) { %>
+                                <option value="<%= item %>">
+                                    <%= item.charAt(0).toUpperCase() + item.slice(1) %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="edit_dob">Date of Birth</label>
+                        <input type="date" id="edit_dob">
+                    </div>
+                    <div class="full-width actions">
+                        <button type="submit">Update Basic Details</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Education -->
+            <div class="sub-section">
+                <h3>Education</h3>
+                <div id="education_list"></div>
+                <details>
+                    <summary>Add Education</summary>
+                    <form id="add_education_form" class="inline-form">
+                        <div><label>Course</label><input type="text" id="add_edu_course" required></div>
+                        <div><label>Passing Year</label><input type="number" id="add_edu_year" required></div>
+                        <div><label>University/Board</label><input type="text" id="add_edu_board" required></div>
+                        <div><label>Percentage</label><input type="number" id="add_edu_percentage" step="0.01" required>
+                        </div>
+                        <button type="submit">Add</button>
+                    </form>
+                </details>
+            </div>
+
+            <!-- Experience -->
+            <div class="sub-section">
+                <h3>Experience</h3>
+                <div id="experience_list"></div>
+                <details>
+                    <summary>Add Experience</summary>
+                    <form id="add_experience_form" class="inline-form">
+                        <div><label>Company</label><input type="text" id="add_exp_company" required></div>
+                        <div><label>Designation</label><input type="text" id="add_exp_designation" required></div>
+                        <div><label>Annual Package</label><input type="number" id="add_exp_package" step="0.01"></div>
+                        <div><label>From</label><input type="date" id="add_exp_from"></div>
+                        <div><label>To</label><input type="date" id="add_exp_to"></div>
+                        <div><label>Reason for Leaving</label><input type="text" id="add_exp_reason"></div>
+                        <div><label>Referral Contact</label><input type="text" id="add_exp_ref_contact"></div>
+                        <div><label>Referral Name</label><input type="text" id="add_exp_ref_name"></div>
+                        <button type="submit">Add</button>
+                    </form>
+                </details>
+            </div>
+
+            <!-- Languages -->
+            <div class="sub-section">
+                <h3>Languages</h3>
+                <div id="language_list"></div>
+                <details>
+                    <summary>Add Language</summary>
+                    <form id="add_language_form" class="inline-form">
+                        <div><label>Language Name</label><input type="text" id="add_lang_name" required></div>
+                        <div><label>Read</label><input type="checkbox" id="add_lang_read"></div>
+                        <div><label>Write</label><input type="checkbox" id="add_lang_write"></div>
+                        <div><label>Speak</label><input type="checkbox" id="add_lang_speak"></div>
+                        <button type="submit">Add</button>
+                    </form>
+                </details>
+            </div>
+
+            <!-- Technologies -->
+            <div class="sub-section">
+                <h3>Technologies</h3>
+                <div id="technology_list"></div>
+                <details>
+                    <summary>Add Technology</summary>
+                    <form id="add_technology_form" class="inline-form">
+                        <div><label>Technology Name</label><input type="text" id="add_tech_name" required></div>
+                        <div>
+                            <label>Skill Level</label>
+                            <select id="add_tech_level">
+                                <% techLevelOptions.forEach(function (option) { %>
+                                    <option value="<%= option.value %>">
+                                        <%= option.label %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                        </div>
+                        <button type="submit">Add</button>
+                    </form>
+                </details>
+            </div>
+
+            <!-- Reference Contacts -->
+            <div class="sub-section">
+                <h3>Reference Contacts</h3>
+                <div id="reference_list"></div>
+                <details>
+                    <summary>Add Reference</summary>
+                    <form id="add_reference_form" class="inline-form">
+                        <div><label>Name</label><input type="text" id="add_ref_name" required></div>
+                        <div><label>Email</label><input type="email" id="add_ref_email" required></div>
+                        <div><label>Phone</label><input type="text" id="add_ref_phone" required></div>
+                        <button type="submit">Add</button>
+                    </form>
+                </details>
+            </div>
+
+            <!-- Preferences -->
+            <div class="sub-section">
+                <h3>Preferences</h3>
+                <div id="preferences_display"></div>
+                <form id="preferences_form" class="inline-form">
+                    <div><label>Current Salary</label><input type="number" id="pref_current_salary" step="0.01"></div>
+                    <div><label>Expected Salary</label><input type="number" id="pref_expected_salary" step="0.01"></div>
+                    <div><label>Notice Period (days)</label><input type="number" id="pref_notice_period"></div>
+                    <div><label>Preferred Role</label><input type="text" id="pref_role"></div>
+                    <button type="submit" id="pref_submit_btn">Save Preferences</button>
+                </form>
+            </div>
+
+            <!-- Locations -->
+            <div class="sub-section">
+                <h3>Preferred Locations</h3>
+                <div id="location_list"></div>
+                <details>
+                    <summary>Add Location</summary>
+                    <form id="add_location_form" class="inline-form">
+                        <div><label>Location</label><input type="text" id="add_loc_name" required></div>
+                        <button type="submit">Add</button>
+                    </form>
+                </details>
+            </div>
+        </section>
+</body>
+
+</html>

@@ -2,12 +2,15 @@ const express = require("express")
 const mysql = require("mysql2")
 const cors = require("cors")
 
+
+
 const app = express()
 const PORT = 3000
 
 app.use(cors())
 app.use(express.json())
 app.use(express.static(__dirname))
+app.set("view engine", "ejs");
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -34,6 +37,17 @@ function query(sql, params) {
 }
 
 //  CANDIDATES APIS
+
+app.get("/", (req, res) => {
+    res.render("index")
+})
+app.get("/index", (req, res) => {
+    res.render("index")
+})
+
+app.get("/users", (req, res) => {
+    res.render("users")
+})
 
 app.get("/candidates", async (req, res) => {
     try {
@@ -83,7 +97,7 @@ app.get("/candidates/:id", async (req, res) => {
             preferences: preferences[0] || null,
             locations
         })
-        console.log(res)
+
     } catch (err) {
         console.error(err)
         res.status(500).send("Database error")

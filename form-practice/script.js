@@ -2,6 +2,8 @@ let education_index = 2;
 let experience_index = 2;
 let languageIndex = 4;
 let technologyIndex = 5;
+const API_BASE_URL = "http://localhost:3000";
+
 
 function addEducation() {
     document.getElementById("education_container").insertAdjacentHTML("beforeend", `<hr id="hr_${education_index}"/>
@@ -444,7 +446,7 @@ async function submitForm() {
         }
     });
 
-    const response = await fetch(`${process.env.API_BASE_URL}/candidates`, {
+    const response = await fetch(`${API_BASE_URL}/candidates`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
