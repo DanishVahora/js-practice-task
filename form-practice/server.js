@@ -404,7 +404,7 @@ app.delete("/candidate-language/:id", async (req, res) => {
     }
 })
 
-// ─── TECHNOLOGIES ───
+// TECHNOLOGIES 
 
 app.get("/technologies", async (req, res) => {
     try {
@@ -473,7 +473,7 @@ app.delete("/candidate-technology/:id", async (req, res) => {
     }
 })
 
-// ─── REFERENCE CONTACTS ───
+// REFERENCE CONTACTS 
 
 app.get("/candidates/:id/references", async (req, res) => {
     try {
@@ -519,7 +519,7 @@ app.delete("/references/:id", async (req, res) => {
     }
 })
 
-// ─── PREFERENCES ───
+// PREFERENCES
 
 app.get("/candidates/:id/preferences", async (req, res) => {
     try {
@@ -567,7 +567,7 @@ app.delete("/preferences/:id", async (req, res) => {
     }
 })
 
-// ─── LOCATIONS ───
+// LOCATIONS
 
 app.get("/candidates/:id/locations", async (req, res) => {
     try {

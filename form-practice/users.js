@@ -47,8 +47,8 @@ async function loadCandidates() {
             <td>${escapeHtml(c.state)}</td>
             <td>
                 <div class="actions">
-                    <button type="button" onclick="openDetail(${c.candidate_id})">View / Edit</button>
-                    <button type="button" onclick="deleteCandidate(${c.candidate_id})">Delete</button>
+                    <button class="view_delete" type="button" onclick="openDetail(${c.candidate_id})">View / Edit</button>
+                    <button class="delete" type="button" onclick="deleteCandidate(${c.candidate_id})">Delete</button>
                 </div>
             </td>`;
         candidateRows.appendChild(row);
