@@ -8,7 +8,7 @@ async function generateFakeData() {
     const connection = await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: 'Root@12345',
+        password: 'Root@1234',
         database: 'students'
     })
 

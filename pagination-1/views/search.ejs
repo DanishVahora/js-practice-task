@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <center><a href="/students">Show Students</a></center>
+
+    <div>
+        <h2>$First Name : ^Last Name : _Phone Number : [Email : ]city </h2>
+    </div>
+    <form method="GET" action="/search">
+        <select name="operators" id="operators">
+            <option value="and" <%=operator==='and' ? 'selected' : '' %>>&</option>
+            <option value="or" <%=operator==='or' ? 'selected' : '' %>>|</option>
+        </select>
+        <label for="query">Search:</label>
+        <input type="text" name="query" placeholder="$firstname, ^lastname, [email" value="<%= query || '' %>">
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    <% if (!query) { %>
+        <p>Enter a value to search students.</p>
+        <% } else if (students.length===0) { %>
+            <p>No students found for "<%= query %>".</p>
+            <% } else { %>
+                <p>Found <%= students.length %> result(s) for "<%= query %>".</p>
+                <table border="1" cellpadding="6" cellspacing="0">
+                    <tr>
+                        <th>Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>DOB</th>
+                        <th>Address</th>
+                        <th>City</th>
+                    </tr>
+                    <% students.forEach(student=> { %>
+                        <tr>
+                            <td>
+                                <%= student.id %>
+                            </td>
+                            <td>
+                                <%= student.fname %>
+                            </td>
+                            <td>
+                                <%= student.lname %>
+                            </td>
+                            <td>
+                                <%= student.email %>
+                            </td>
+                            <td>
+                                <%= student.phone_number %>
+                            </td>
+                            <td>
+                                <%= student.gender %>
+                            </td>
+                            <td>
+                                <%= student.dob ? new Date(student.dob).toISOString().split('T')[0] : '' %>
+                            </td>
+                            <td>
+                                <%= student.address %>
+                            </td>
+                            <td>
+                                <%= student.city %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </table>
+                <% } %>
+
+</body>
+
+</html>
