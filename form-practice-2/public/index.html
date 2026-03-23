@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Form</title>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div style="display: flex; justify-content: center; gap: 16px; margin: 12px 0;">
+        <a href="index.html">Create Candidate</a>
+        <a href="users.html">Manage Candidates</a>
+    </div>
+    <h1 style="display: flex; justify-content: center;">Form Practice</h1>
+    <form onsubmit="return validateForm()" id="candidate_form" method="post">
+
+        <!-- basic details -->
+        <div id="basic_details">
+            <fieldset>
+                <legend style="font-size: xx-large;">Basic Details :</legend>
+                <br>
+                <label for="fname">First name:</label>
+                <input type="text" id="fname" name="first_name" value="Danish">
+                <label style="padding-left: 75px;" for="lname">Last name:</label>
+                <input type="text" id="lname" name="last_name" value="Vahora">
+                <br>
+                <br>
+                <label for="designation">Designation:</label>
+                <input type="text" id="designation" name="designation" value="PHP Developer">
+                <br>
+                <br>
+                <br>
+                <br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="danish.vahora@example.com">
+                <label style="padding-left: 75px;" for="mobile_number">Mobile Number:</label>
+                <input type="tel" id="mobile_number" name="mobile_number" value="1234567890">
+                <br>
+                <br>
+                <br>
+                <br>
+                <label for="address_1">Address 1:</label>
+                <input type="text" id="address_1" name="address_1" value="123 Main Street">
+                <label style="padding-left: 75px;" for="address_2">Address 2:</label>
+                <input type="text" id="address_2" name="address_2" value="Apartment 4B">
+                <br>
+                <br>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" value="Ahmedabad">
+                <label style="padding-left: 75px;" for="state">State:</label>
+                <select name="state" id="state">
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Delhi">Delhi</option>
+                </select>
+                <label style="padding-left: 75px;" for="pincode">Pincode:</label>
+                <input type="text" id="pincode" name="pincode" value="380001">
+                <br>
+                <br>
+                <br>
+                <br>
+                <label>Gender</label>
+                <input type="radio" id="male" name="gender" value="male" checked>
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female">
+                <label for="female">Female</label>
+
+                <label style="padding-left: 75px;" for="relationship_status">Relationship Status:</label>
+                <select name="relationship_status" id="relationship_status">
+                    <option value="single">Single</option>
+                    <option value="married" selected>Married</option>
+                    <option value="divorced">Divorced</option>
+                </select>
+                <label style="padding-left: 75px;" for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" value="1990-01-01">
+            </fieldset>
+        </div>
+        <br><br><br>
+
+        <!-- education -->
+        <div id="education_details">
+            <fieldset>
+                <legend style="font-size: xx-large;">Education Details :</legend>
+                <div id="education_container">
+
+                    <button type="button" onclick="addEducation()">Add Field</button><button type="button"
+                        onclick="removeEducation()">Remove Field</button>
+                    <br><br>
+                    <label for="course_1">Course:</label>
+                    <input type="text" id="course_1" name="course" value="Bachelor of Computer Applications"><br><br>
+                    <label for="passing_year_1">Passing Year:</label>
+                    <input type="number" id="passing_year_1" name="passing_year_1" value="2012">
+                    <label style="padding-left: 40px;" for="uni_board_1">University/Board:</label>
+                    <input type="text" id="uni_board_1" name="uni_board_1" value="Gujarat University">
+                    <label style="padding-left: 40px;" for="percentage_1">Percentage:</label>
+                    <input type="number" id="percentage_1" name="percentage_1" step="0.01" value="75.5">
+                    <button type="button" id="remove_edu_1" onclick="removeEducationId(1)">X</button>
+
+                </div>
+            </fieldset>
+        </div> <br><br><br>
+
+        <!-- experience -->
+        <div id="experience">
+            <fieldset>
+                <legend style="font-size: xx-large;">Experience Details :
+                </legend>
+                <div id="experience_container">
+
+                    <button type="button" onclick="addExperience()">Add Field</button><button type="button"
+                        onclick="removeExperience()">Remove Field</button><br><br>
+                    <label for="company_1">Company:</label>
+                    <input type="text" id="company_1" name="company_1" value="ABC Solutions">
+                    <label id="designation_label_1" style="padding-left: 75px;" for="designation_1">Designation:</label>
+                    <input type="text" id="designation_1" name="designation_1" value="Software Engineer ">
+                    <label id="annual_package_label_1" style="padding-left: 75px;" for="annual_package_1">Annual
+                        Package:</label>
+                    <input type="number" id="annual_package_1" name="annual_package_1" step="0.01"
+                        value="50000"><br><br>
+                    <label id="from_label_1" for="from_1">From:</label>
+                    <input type="date" id="from_1" name="from_1" value="2012-06-01">
+                    <label id="to_label_1" style="padding-left: 75px;" for="to_1">To:</label>
+                    <input type="date" id="to_1" name="to_1" value="2015-05-31">
+                    <label id="reason_to_leave_label_1" style="padding-left: 75px;" for="reason_to_leave_1">Reason for
+                        Leaving:</label>
+                    <input type="text" name="reason_to_leave_1" id="reason_to_leave_1"
+                        value="Seeking better opportunities"><br><br>
+                    <label id="ref_contact_label_1" for="ref_contact_1">Referral Contact:</label>
+                    <input type="text" id="ref_contact_1" name="ref_contact_1" value="John Doe">
+                    <label id="ref_name_label_1" style="padding-left: 75px;" for="ref_name_1">Referral Name:</label>
+                    <input type="text" id="ref_name_1" name="ref_name_1" value="Jane Smith">
+                    <button type="button" id="remove_exp_1" onclick="removeExperienceId(1)">X</button>
+
+                </div>
+            </fieldset>
+        </div><br><br><br>
+
+        <!-- languages known -->
+        <div id="languages_known">
+            <fieldset>
+                <legend style="font-size: xx-large;">Languages Known</legend>
+                <div style="margin-bottom: 10px;">
+                    <input type="text" id="language_input" placeholder="Add language" value="English">
+                    <button type="button" onclick="addLanguage()">Add</button>
+                </div>
+                <div id="languages_list">
+                    <label for="english">English</label>
+                    <input type="checkbox" id="english" name="english" value="English" onclick="checkBox(this)"
+                        checked><br>
+                    <label for="hindi">Hindi</label>
+                    <input type="checkbox" id="hindi" name="hindi" value="Hindi" onclick="checkBox(this)"><br>
+                    <label for="gujarati">Gujarati</label>
+                    <input type="checkbox" id="gujarati" name="gujarati" value="Gujarati" onclick="checkBox(this)">
+                    <button type="button" id="remove_lang_1" onclick="removeLanguageId(1)">X</button>
+                    <br>
+                </div>
+            </fieldset>
+        </div><br><br><br>
+
+        <!-- technologies known -->
+        <div id="technologies_known">
+            <fieldset>
+                <legend style="font-size: xx-large;">Technologies Known</legend>
+                <div style="margin-bottom: 10px;">
+                    <input type="text" id="technology_input" placeholder="Add technology" value="PHP">
+                    <button type="button" onclick="addTechnology()">Add</button>
+                </div>
+                <div id="technologies_list">
+                    <label for="php">PHP</label>
+                    <input type="checkbox" id="php" name="php" value="PHP" onclick="radioButton(this)" checked><br>
+                    <label for="MySQL">MySQL</label>
+                    <input type="checkbox" id="MySQL" name="MySQL" value="MySQL" onclick="radioButton(this)"><br>
+                    <label for="Laravel">Laravel</label>
+                    <input type="checkbox" id="Laravel" name="Laravel" value="Laravel" onclick="radioButton(this)"><br>
+                    <label for="oracle">Oracle</label>
+                    <input type="checkbox" id="oracle" name="oracle" value="Oracle" onclick="radioButton(this)"><br>
+                </div>
+            </fieldset>
+        </div><br><br><br>
+
+        <!-- references contact -->
+        <div id="reference_contact">
+            <fieldset>
+                <legend style="font-size: xx-large;">Reference Contact</legend>
+                <label for="ref_name">Name:</label>
+                <input type="text" id="ref_name" name="ref_name" value="Jane Smith">
+                <label style="padding-left: 75px;" for="ref_email">Email:</label>
+                <input type="email" id="ref_email" name="ref_email" value="jane.smith@example.com">
+                <label style="padding-left: 75px;" for="ref_phone">Phone Number:</label>
+                <input type="tel" id="ref_phone" name="ref_phone" value="1234567890">
+            </fieldset>
+        </div><br><br><br>
+
+        <!-- preferences -->
+        <div id="preferences">
+            <fieldset>
+                <legend style="font-size: xx-large;">Preferences</legend>
+                <label for="job_location">Preferred Job Location:</label>
+                <select name="job_location" id="job_location" multiple>
+                    <option value="ahemdabad">Ahmedabad</option>
+                    <option value="anand">Anand</option>
+                </select>
+                <label style="padding-left: 75px;" for="expected_salary">Expected Salary:</label>
+                <input type="number" id="expected_salary" name="expected_salary" step="0.01" value="50000.00">
+                <label style="padding-left: 75px;" for="current_salary">Current Salary:</label>
+                <input type="number" id="current_salary" name="current_salary" step="0.01" value="45000.00"><br><br>
+                <label for="notice_period">Notice Period (in days):</label>
+                <input type="number" id="notice_period" name="notice_period" value="30">
+                <label for="preferred_role">Preferred Role:</label>
+                <select name="preferred_role" id="preferred_role">
+                    <option value="developer" selected>Developer</option>
+                    <option value="manager">Manager</option>
+                    <option value="analyst">Analyst</option>
+                </select>
+            </fieldset>
+            <button type="submit">submit</button>
+        </div>
+    </form>
+</body>
+
+</html>
