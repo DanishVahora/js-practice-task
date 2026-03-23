@@ -4,6 +4,55 @@ let languageIndex = 4;
 let technologyIndex = 5;
 const API_BASE_URL = "http://localhost:3000";
 
+function hasValue(id) {
+    const el = document.getElementById(id);
+    return !!(el && String(el.value || "").trim() !== "");
+}
+
+function removeEducationElements(index) {
+    document.getElementById(`hr_${index}`)?.remove();
+    document.getElementById(`passing_year_label_${index}`)?.remove();
+    document.getElementById(`uni_board_label_${index}`)?.remove();
+    document.getElementById(`percentage_label_${index}`)?.remove();
+    document.getElementById(`course_label_${index}`)?.remove();
+    document.getElementById(`course_${index}`)?.remove();
+    document.getElementById(`passing_year_${index}`)?.remove();
+    document.getElementById(`uni_board_${index}`)?.remove();
+    document.getElementById(`percentage_${index}`)?.remove();
+    document.getElementById(`remove_edu_${index}`)?.remove();
+}
+
+function removeExperienceElements(index) {
+    document.getElementById(`hr_exp_${index}`)?.remove();
+    document.getElementById(`company_label_${index}`)?.remove();
+    document.getElementById(`designation_label_${index}`)?.remove();
+    document.getElementById(`annual_package_label_${index}`)?.remove();
+    document.getElementById(`from_label_${index}`)?.remove();
+    document.getElementById(`to_label_${index}`)?.remove();
+    document.getElementById(`reason_to_leave_label_${index}`)?.remove();
+    document.getElementById(`ref_contact_label_${index}`)?.remove();
+    document.getElementById(`ref_name_label_${index}`)?.remove();
+    document.getElementById(`company_${index}`)?.remove();
+    document.getElementById(`designation_${index}`)?.remove();
+    document.getElementById(`annual_package_${index}`)?.remove();
+    document.getElementById(`from_${index}`)?.remove();
+    document.getElementById(`to_${index}`)?.remove();
+    document.getElementById(`reason_to_leave_${index}`)?.remove();
+    document.getElementById(`ref_contact_${index}`)?.remove();
+    document.getElementById(`ref_name_${index}`)?.remove();
+    document.getElementById(`remove_exp_${index}`)?.remove();
+}
+
+function educationRowHasData(index) {
+    return hasValue(`course_${index}`) || hasValue(`passing_year_${index}`) || hasValue(`uni_board_${index}`) || hasValue(`percentage_${index}`);
+}
+
+function experienceRowHasData(index) {
+    return hasValue(`company_${index}`) || hasValue(`designation_${index}`) || hasValue(`annual_package_${index}`) ||
+        hasValue(`from_${index}`) || hasValue(`to_${index}`) || hasValue(`reason_to_leave_${index}`) ||
+        hasValue(`ref_contact_${index}`) || hasValue(`ref_name_${index}`);
+}
+
 
 function addEducation() {
     document.getElementById("education_container").insertAdjacentHTML("beforeend", `<hr id="hr_${education_index}"/>
@@ -20,16 +69,10 @@ function addEducation() {
     education_index++;
 }
 function removeEducationId(index) {
-    document.getElementById(`hr_${index}`)?.remove();
-    document.getElementById(`passing_year_label_${index}`)?.remove();
-    document.getElementById(`uni_board_label_${index}`)?.remove();
-    document.getElementById(`percentage_label_${index}`)?.remove();
-    document.getElementById(`course_label_${index}`)?.remove();
-    document.getElementById(`course_${index}`)?.remove();
-    document.getElementById(`passing_year_${index}`)?.remove();
-    document.getElementById(`uni_board_${index}`)?.remove();
-    document.getElementById(`percentage_${index}`)?.remove();
-    document.getElementById(`remove_edu_${index}`)?.remove();
+    if (educationRowHasData(index) && !confirm("This education row has data. Do you still want to delete it?")) {
+        return;
+    }
+    removeEducationElements(index);
 }
 
 function removeEducation() {
@@ -38,16 +81,10 @@ function removeEducation() {
     }
 
     const lastIndex = education_index - 1;
-    document.getElementById(`hr_${lastIndex}`)?.remove();
-    document.getElementById(`passing_year_label_${lastIndex}`)?.remove();
-    document.getElementById(`uni_board_label_${lastIndex}`)?.remove();
-    document.getElementById(`percentage_label_${lastIndex}`)?.remove();
-    document.getElementById(`course_label_${lastIndex}`)?.remove();
-    document.getElementById(`course_${lastIndex}`)?.remove();
-    document.getElementById(`passing_year_${lastIndex}`)?.remove();
-    document.getElementById(`uni_board_${lastIndex}`)?.remove();
-    document.getElementById(`percentage_${lastIndex}`)?.remove();
-    document.getElementById(`remove_edu_${lastIndex}`)?.remove();
+    if (educationRowHasData(lastIndex) && !confirm("This education row has data. Do you still want to delete it?")) {
+        return;
+    }
+    removeEducationElements(lastIndex);
 
     education_index--;
 }
@@ -76,24 +113,10 @@ function addExperience() {
 }
 
 function removeExperienceId(index) {
-    document.getElementById(`hr_exp_${index}`)?.remove();
-    document.getElementById(`company_label_${index}`)?.remove();
-    document.getElementById(`designation_label_${index}`)?.remove();
-    document.getElementById(`annual_package_label_${index}`)?.remove();
-    document.getElementById(`from_label_${index}`)?.remove();
-    document.getElementById(`to_label_${index}`)?.remove();
-    document.getElementById(`reason_to_leave_label_${index}`)?.remove();
-    document.getElementById(`ref_contact_label_${index}`)?.remove();
-    document.getElementById(`ref_name_label_${index}`)?.remove();
-    document.getElementById(`company_${index}`)?.remove();
-    document.getElementById(`designation_${index}`)?.remove();
-    document.getElementById(`annual_package_${index}`)?.remove();
-    document.getElementById(`from_${index}`)?.remove();
-    document.getElementById(`to_${index}`)?.remove();
-    document.getElementById(`reason_to_leave_${index}`)?.remove();
-    document.getElementById(`ref_contact_${index}`)?.remove();
-    document.getElementById(`ref_name_${index}`)?.remove();
-    document.getElementById(`remove_exp_${index}`)?.remove();
+    if (experienceRowHasData(index) && !confirm("This experience row has data. Do you still want to delete it?")) {
+        return;
+    }
+    removeExperienceElements(index);
 }
 
 
@@ -103,24 +126,10 @@ function removeExperience() {
     }
 
     const lastIndex = experience_index - 1;
-    document.getElementById(`hr_exp_${lastIndex}`)?.remove();
-    document.getElementById(`company_label_${lastIndex}`)?.remove();
-    document.getElementById(`designation_label_${lastIndex}`)?.remove();
-    document.getElementById(`annual_package_label_${lastIndex}`)?.remove();
-    document.getElementById(`from_label_${lastIndex}`)?.remove();
-    document.getElementById(`to_label_${lastIndex}`)?.remove();
-    document.getElementById(`reason_to_leave_label_${lastIndex}`)?.remove();
-    document.getElementById(`ref_contact_label_${lastIndex}`)?.remove();
-    document.getElementById(`ref_name_label_${lastIndex}`)?.remove();
-    document.getElementById(`company_${lastIndex}`)?.remove();
-    document.getElementById(`designation_${lastIndex}`)?.remove();
-    document.getElementById(`annual_package_${lastIndex}`)?.remove();
-    document.getElementById(`from_${lastIndex}`)?.remove();
-    document.getElementById(`to_${lastIndex}`)?.remove();
-    document.getElementById(`reason_to_leave_${lastIndex}`)?.remove();
-    document.getElementById(`ref_contact_${lastIndex}`)?.remove();
-    document.getElementById(`ref_name_${lastIndex}`)?.remove();
-    document.getElementById(`remove_exp_${lastIndex}`)?.remove();
+    if (experienceRowHasData(lastIndex) && !confirm("This experience row has data. Do you still want to delete it?")) {
+        return;
+    }
+    removeExperienceElements(lastIndex);
     experience_index--;
 }
 
@@ -465,3 +474,33 @@ async function submitForm() {
     alert(result);
     document.getElementById("candidate_form").reset();
 }
+
+
+
+/*See i have created upto this, now i have to create it from scratch with the required changes like we discuss
+
+brief me about combo boxes in html, also le me sha my files 
+
+
+here we have to do built this from scratch like with additional changes of server and backend side validations, also each combo fields will be operated from a single table, like we have relationship status, also we have radio buttons for technologies, where we have to add all these dynamically through back end table, 
+like adding status fields one by one married, single, divorced, from db only, 
+also each field must 
+
+
+
+
+Now version 2 tasks
+
+    Start from scratch Job application form Use Dynamic combo box control as we have discussed in the session , I want you to use only one table to store all row data which you have used in select box or redio or check boxes . you have to design database for select master and option master as we have discussed in session First design combos in reusable functions where you just need to make one function which can reproduce the combo boxs. for grid controlls for Skills and languages you have to make custom by using select master and option master data , recreate again the Job application assignment with the above details. This time in edit mode you have to show the Tab sections 
+
+Basic Details and Preferences | Academic Details | Past Experience  | Skills  | Languages known .
+
+Each TAB has separate edit and Save button button , 
+
+also search by fname, lname, email, phone number should be there, with the preceding prefix like $ for searching with fname, ^ for last name etc etc, 
+pagnation should work, 
+
+tell me the approach what shouldi built all in easy way, we have to follow ejs for this 
+
+
+ */

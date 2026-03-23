@@ -7,6 +7,57 @@ const editForm = document.getElementById("edit_form");
 const API_BASE_URL = (window.API_BASE_URL || "http://localhost:3000").replace(/\/$/, "");
 
 let currentCandidateId = null;
+let currentPage = 1;
+let totalPages = 1;
+let currentSearch = "";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MOBILE_RE = /^\d{10}$/;
+const PIN_RE = /^\d{6}$/;
+
+function validateBasicDetails(payload) {
+    if (!payload.first_name) return "First name is required";
+    if (!payload.last_name) return "Last name is required";
+    if (!payload.designation) return "Designation is required";
+    if (!EMAIL_RE.test(payload.email)) return "Valid email is required";
+    if (!MOBILE_RE.test(payload.mobile)) return "Mobile number must be 10 digits";
+    if (!payload.address1) return "Address 1 is required";
+    if (!payload.city) return "City is required";
+    if (!PIN_RE.test(payload.pincode)) return "Pincode must be 6 digits";
+    if (!["male", "female"].includes(payload.gender)) return "Gender is required";
+    if (!["single", "married", "divorced"].includes(payload.relationship)) return "Relationship status is required";
+    if (!payload.dob || new Date(payload.dob) >= new Date()) return "Date of birth must be in the past";
+    return null;
+}
+
+function validateEducation(payload) {
+    const year = Number(payload.passing_year);
+    const pct = Number(payload.percentage);
+    const currentYear = new Date().getFullYear();
+    if (!payload.course_name.trim()) return "Course is required";
+    if (!Number.isInteger(year) || year < 1900 || year > currentYear) return "Passing year is invalid";
+    if (!payload.university_board.trim()) return "University/Board is required";
+    if (!Number.isFinite(pct) || pct < 0 || pct > 100) return "Percentage must be between 0 and 100";
+    return null;
+}
+
+function validateExperience(payload) {
+    const annualPackage = Number(payload.annual_package);
+    if (!payload.company.trim()) return "Company is required";
+    if (!payload.designation.trim()) return "Designation is required";
+    if (!Number.isFinite(annualPackage) || annualPackage < 0) return "Annual package must be 0 or greater";
+    if (!payload.from_date) return "From date is required";
+    if (!payload.to_date) return "To date is required";
+    if (new Date(payload.from_date) > new Date(payload.to_date)) return "From date cannot be after To date";
+    return null;
+}
+
+function validateReference(payload) {
+    if (!payload.reference_name.trim()) return "Reference name is required";
+    if (!EMAIL_RE.test(payload.email)) return "Valid reference email is required";
+    if (!MOBILE_RE.test(payload.phone_number)) return "Reference phone must be 10 digits";
+    return null;
+}
 
 function escapeHtml(value) {
     return String(value ?? "")
@@ -25,15 +76,33 @@ function formatDate(d) {
 // ─── CANDIDATES LIST ───
 
 async function loadCandidates() {
-    const response = await fetch(`${API_BASE_URL}/candidates`);
-    const candidates = await response.json();
-    console.log(candidates);
+    const params = new URLSearchParams({
+        page: String(currentPage),
+        pageSize: "5",
+        search: currentSearch
+    });
+    const response = await fetch(`${API_BASE_URL}/candidates?${params.toString()}`);
+    const result = await response.json();
     if (!response.ok) {
         alert("Failed to load candidates");
         return;
     }
 
+    const candidates = result.data || [];
+    totalPages = result.pagination?.totalPages || 1;
+    currentPage = result.pagination?.page || 1;
+
+    const info = document.getElementById("pagination_info");
+    info.textContent = `Page ${currentPage} / ${totalPages} (${result.pagination?.total || 0} records)`;
+    document.getElementById("prev_page").disabled = currentPage <= 1;
+    document.getElementById("next_page").disabled = currentPage >= totalPages;
+
     candidateRows.innerHTML = "";
+
+    if (!candidates.length) {
+        candidateRows.innerHTML = `<tr><td colspan="8">No records found.</td></tr>`;
+        return;
+    }
 
     for (const c of candidates) {
         const row = document.createElement("tr");
@@ -128,6 +197,13 @@ editForm.addEventListener("submit", async e => {
         relationship: document.getElementById("edit_relationship").value,
         dob: document.getElementById("edit_dob").value
     };
+
+    const error = validateBasicDetails(payload);
+    if (error) {
+        alert(error);
+        return;
+    }
+
     const response = await fetch(`${API_BASE_URL}/candidates/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -171,10 +247,17 @@ async function editEducation(id, course, year, board, pct) {
     const newPct = prompt("Percentage:", pct);
     if (newPct === null) return;
 
+    const payload = { course_name: newCourse.trim(), passing_year: newYear, university_board: newBoard.trim(), percentage: newPct };
+    const validationError = validateEducation(payload);
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/education/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ course_name: newCourse, passing_year: newYear, university_board: newBoard, percentage: newPct })
+        body: JSON.stringify(payload)
     });
     if (!r.ok) { alert("Failed to update"); return; }
     alert(await r.text());
@@ -183,17 +266,24 @@ async function editEducation(id, course, year, board, pct) {
 
 document.getElementById("add_education_form").addEventListener("submit", async e => {
     e.preventDefault();
+    const payload = {
+        course_name: document.getElementById("add_edu_course").value.trim(),
+        passing_year: document.getElementById("add_edu_year").value,
+        university_board: document.getElementById("add_edu_board").value.trim(),
+        percentage: document.getElementById("add_edu_percentage").value
+    };
+    const validationError = validateEducation(payload);
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/candidates/${currentCandidateId}/education`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            course_name: document.getElementById("add_edu_course").value,
-            passing_year: document.getElementById("add_edu_year").value,
-            university_board: document.getElementById("add_edu_board").value,
-            percentage: document.getElementById("add_edu_percentage").value
-        })
+        body: JSON.stringify(payload)
     });
-    if (!r.ok) { alert("Failed to add"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to add"); return; }
     alert(await r.text());
     e.target.reset();
     await openDetail(currentCandidateId);
@@ -238,10 +328,17 @@ async function editExperience(e) {
     const referral_name = prompt("Referral Name:", e.referral_name || "");
     if (referral_name === null) return;
 
+    const payload = { company: company.trim(), designation: designation.trim(), annual_package, from_date, to_date, reason_to_leaving, referral_contact, referral_name };
+    const validationError = validateExperience(payload);
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/experience/${e.experience_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ company, designation, annual_package, from_date, to_date, reason_to_leaving, referral_contact, referral_name })
+        body: JSON.stringify(payload)
     });
     if (!r.ok) { alert("Failed to update"); return; }
     alert(await r.text());
@@ -250,21 +347,28 @@ async function editExperience(e) {
 
 document.getElementById("add_experience_form").addEventListener("submit", async e => {
     e.preventDefault();
+    const payload = {
+        company: document.getElementById("add_exp_company").value.trim(),
+        designation: document.getElementById("add_exp_designation").value.trim(),
+        annual_package: document.getElementById("add_exp_package").value,
+        from_date: document.getElementById("add_exp_from").value,
+        to_date: document.getElementById("add_exp_to").value,
+        reason_to_leaving: document.getElementById("add_exp_reason").value,
+        referral_contact: document.getElementById("add_exp_ref_contact").value,
+        referral_name: document.getElementById("add_exp_ref_name").value
+    };
+    const validationError = validateExperience(payload);
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/candidates/${currentCandidateId}/experience`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            company: document.getElementById("add_exp_company").value,
-            designation: document.getElementById("add_exp_designation").value,
-            annual_package: document.getElementById("add_exp_package").value,
-            from_date: document.getElementById("add_exp_from").value,
-            to_date: document.getElementById("add_exp_to").value,
-            reason_to_leaving: document.getElementById("add_exp_reason").value,
-            referral_contact: document.getElementById("add_exp_ref_contact").value,
-            referral_name: document.getElementById("add_exp_ref_name").value
-        })
+        body: JSON.stringify(payload)
     });
-    if (!r.ok) { alert("Failed to add"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to add"); return; }
     alert(await r.text());
     e.target.reset();
     await openDetail(currentCandidateId);
@@ -311,17 +415,23 @@ async function editLanguage(id, canRead, canWrite, canSpeak) {
 
 document.getElementById("add_language_form").addEventListener("submit", async e => {
     e.preventDefault();
+    const languageName = document.getElementById("add_lang_name").value.trim();
+    if (!languageName) {
+        alert("Language name is required");
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/candidates/${currentCandidateId}/languages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            language_name: document.getElementById("add_lang_name").value,
+            language_name: languageName,
             can_read: document.getElementById("add_lang_read").checked,
             can_write: document.getElementById("add_lang_write").checked,
             can_speak: document.getElementById("add_lang_speak").checked
         })
     });
-    if (!r.ok) { alert("Failed to add"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to add"); return; }
     alert(await r.text());
     e.target.reset();
     await openDetail(currentCandidateId);
@@ -351,6 +461,11 @@ async function deleteTechnology(id) {
 async function editTechnology(id, currentLevel) {
     const level = prompt("Skill Level (Beginner / Intermidiate / Expert):", currentLevel);
     if (level === null) return;
+    const normalized = String(level).trim().toLowerCase();
+    if (!["beginner", "intermidiate", "intermediate", "expert"].includes(normalized)) {
+        alert("Skill level must be Beginner, Intermidiate, or Expert");
+        return;
+    }
 
     const r = await fetch(`${API_BASE_URL}/candidate-technology/${id}`, {
         method: "PUT",
@@ -364,15 +479,20 @@ async function editTechnology(id, currentLevel) {
 
 document.getElementById("add_technology_form").addEventListener("submit", async e => {
     e.preventDefault();
+    const technologyName = document.getElementById("add_tech_name").value.trim();
+    if (!technologyName) {
+        alert("Technology name is required");
+        return;
+    }
     const r = await fetch(`${API_BASE_URL}/candidates/${currentCandidateId}/technologies`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            technology_name: document.getElementById("add_tech_name").value,
+            technology_name: technologyName,
             skill_level: document.getElementById("add_tech_level").value
         })
     });
-    if (!r.ok) { alert("Failed to add"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to add"); return; }
     alert(await r.text());
     e.target.reset();
     await openDetail(currentCandidateId);
@@ -407,10 +527,17 @@ async function editReference(id, name, email, phone) {
     const newPhone = prompt("Phone:", phone);
     if (newPhone === null) return;
 
+    const payload = { reference_name: newName.trim(), email: newEmail.trim(), phone_number: newPhone.trim() };
+    const validationError = validateReference(payload);
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/references/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference_name: newName, email: newEmail, phone_number: newPhone })
+        body: JSON.stringify(payload)
     });
     if (!r.ok) { alert("Failed to update"); return; }
     alert(await r.text());
@@ -419,16 +546,23 @@ async function editReference(id, name, email, phone) {
 
 document.getElementById("add_reference_form").addEventListener("submit", async e => {
     e.preventDefault();
+    const payload = {
+        reference_name: document.getElementById("add_ref_name").value.trim(),
+        email: document.getElementById("add_ref_email").value.trim(),
+        phone_number: document.getElementById("add_ref_phone").value.trim()
+    };
+    const validationError = validateReference(payload);
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/candidates/${currentCandidateId}/references`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            reference_name: document.getElementById("add_ref_name").value,
-            email: document.getElementById("add_ref_email").value,
-            phone_number: document.getElementById("add_ref_phone").value
-        })
+        body: JSON.stringify(payload)
     });
-    if (!r.ok) { alert("Failed to add"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to add"); return; }
     alert(await r.text());
     e.target.reset();
     await openDetail(currentCandidateId);
@@ -474,8 +608,24 @@ document.getElementById("preferences_form").addEventListener("submit", async e =
         current_salary: document.getElementById("pref_current_salary").value,
         expected_salary: document.getElementById("pref_expected_salary").value,
         notice_period: document.getElementById("pref_notice_period").value,
-        preferred_role: document.getElementById("pref_role").value
+        preferred_role: document.getElementById("pref_role").value.trim()
     };
+
+    const currentSalary = payload.current_salary === "" ? null : Number(payload.current_salary);
+    const expectedSalary = payload.expected_salary === "" ? null : Number(payload.expected_salary);
+    const noticePeriod = payload.notice_period === "" ? null : Number(payload.notice_period);
+    if (Number.isNaN(currentSalary) || (currentSalary !== null && currentSalary < 0)) {
+        alert("Current salary must be 0 or greater");
+        return;
+    }
+    if (Number.isNaN(expectedSalary) || (expectedSalary !== null && expectedSalary < 0)) {
+        alert("Expected salary must be 0 or greater");
+        return;
+    }
+    if (Number.isNaN(noticePeriod) || (noticePeriod !== null && noticePeriod < 0)) {
+        alert("Notice period must be 0 or greater");
+        return;
+    }
 
     let r;
     if (currentPreferenceId) {
@@ -491,7 +641,7 @@ document.getElementById("preferences_form").addEventListener("submit", async e =
             body: JSON.stringify(payload)
         });
     }
-    if (!r.ok) { alert("Failed to save preferences"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to save preferences"); return; }
     const result = await r.text();
     alert(typeof result === "string" ? result : "Preferences saved");
     await openDetail(currentCandidateId);
@@ -537,15 +687,21 @@ document.getElementById("add_location_form").addEventListener("submit", async e 
         alert("Please save preferences first before adding locations.");
         return;
     }
+    const location = document.getElementById("add_loc_name").value.trim();
+    if (!location) {
+        alert("Preferred location is required");
+        return;
+    }
+
     const r = await fetch(`${API_BASE_URL}/candidates/${currentCandidateId}/locations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             preference_id: currentPreferenceId,
-            preferred_location: document.getElementById("add_loc_name").value
+            preferred_location: location
         })
     });
-    if (!r.ok) { alert("Failed to add"); return; }
+    if (!r.ok) { alert(await r.text() || "Failed to add"); return; }
     alert(await r.text());
     e.target.reset();
     await openDetail(currentCandidateId);
@@ -560,6 +716,31 @@ document.getElementById("close_detail").addEventListener("click", () => {
 
 document.getElementById("refresh_btn").addEventListener("click", () => {
     loadCandidates().catch(() => alert("Failed to refresh"));
+});
+
+document.getElementById("search_btn").addEventListener("click", () => {
+    currentSearch = document.getElementById("search_input").value.trim();
+    currentPage = 1;
+    loadCandidates().catch(() => alert("Failed to search"));
+});
+
+document.getElementById("clear_btn").addEventListener("click", () => {
+    document.getElementById("search_input").value = "";
+    currentSearch = "";
+    currentPage = 1;
+    loadCandidates().catch(() => alert("Failed to clear search"));
+});
+
+document.getElementById("prev_page").addEventListener("click", () => {
+    if (currentPage <= 1) return;
+    currentPage -= 1;
+    loadCandidates().catch(() => alert("Failed to change page"));
+});
+
+document.getElementById("next_page").addEventListener("click", () => {
+    if (currentPage >= totalPages) return;
+    currentPage += 1;
+    loadCandidates().catch(() => alert("Failed to change page"));
 });
 
 // ─── INIT ───

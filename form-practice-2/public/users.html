@@ -134,7 +134,15 @@
     </div>
 
     <h1>Candidate List</h1>
-    <button type="button" id="refresh_btn">Refresh</button>
+    <div class="inline-form" style="margin-bottom: 16px;">
+        <div>
+            <label for="search_input">Search</label>
+            <input type="text" id="search_input" placeholder="Use $fname ^lname @email #phone or plain text">
+        </div>
+        <button type="button" id="search_btn">Search</button>
+        <button type="button" id="clear_btn">Clear</button>
+        <button type="button" id="refresh_btn">Refresh</button>
+    </div>
 
     <table>
         <thead>
@@ -151,6 +159,11 @@
         </thead>
         <tbody id="candidate_rows"></tbody>
     </table>
+    <div class="actions">
+        <button type="button" id="prev_page">Previous</button>
+        <span id="pagination_info">Page 1 / 1</span>
+        <button type="button" id="next_page">Next</button>
+    </div>
 
     <!-- Detail / Edit Section -->
     <section id="detail_section" class="section">

@@ -36,23 +36,193 @@ function query(sql, params) {
     })
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MOBILE_RE = /^\d{10}$/
+const PIN_RE = /^\d{6}$/
+
+function norm(value) {
+    return String(value ?? "").trim()
+}
+
+function normalizeSkillLevel(level) {
+    const v = norm(level).toLowerCase()
+    if (v === "expert") return "Expert"
+    if (v === "intermediate" || v === "intermidiate") return "Intermidiate"
+    return "Beginner"
+}
+
+function parsePositiveNumber(value) {
+    if (value === "" || value === null || value === undefined) return null
+    const n = Number(value)
+    return Number.isFinite(n) ? n : NaN
+}
+
+function validateCandidatePayload(payload) {
+    const firstName = norm(payload.first_name)
+    const lastName = norm(payload.last_name)
+    const designation = norm(payload.designation)
+    const email = norm(payload.email)
+    const mobile = norm(payload.mobile)
+    const address1 = norm(payload.address1)
+    const city = norm(payload.city)
+    const pincode = norm(payload.pincode)
+    const gender = norm(payload.gender).toLowerCase()
+    const relationship = norm(payload.relationship).toLowerCase()
+    const dob = norm(payload.dob)
+
+    if (!firstName) return "First name is required"
+    if (!lastName) return "Last name is required"
+    if (!designation) return "Designation is required"
+    if (!email || !EMAIL_RE.test(email)) return "Valid email is required"
+    if (!mobile || !MOBILE_RE.test(mobile)) return "Mobile number must be 10 digits"
+    if (!address1) return "Address 1 is required"
+    if (!city) return "City is required"
+    if (!pincode || !PIN_RE.test(pincode)) return "Pincode must be 6 digits"
+    if (!["male", "female"].includes(gender)) return "Valid gender is required"
+    if (!["single", "married", "divorced"].includes(relationship)) return "Valid relationship status is required"
+    if (!dob) return "Date of birth is required"
+
+    const dobDate = new Date(dob)
+    if (Number.isNaN(dobDate.getTime()) || dobDate >= new Date()) {
+        return "Date of birth must be a valid past date"
+    }
+
+    return null
+}
+
+function validateEducationPayload(payload) {
+    const course = norm(payload.course_name)
+    const board = norm(payload.university_board)
+    const year = Number(payload.passing_year)
+    const pct = Number(payload.percentage)
+    const currentYear = new Date().getFullYear()
+
+    if (!course) return "Course is required"
+    if (!Number.isInteger(year) || year < 1900 || year > currentYear) return "Passing year is invalid"
+    if (!board) return "University/Board is required"
+    if (!Number.isFinite(pct) || pct < 0 || pct > 100) return "Percentage must be between 0 and 100"
+    return null
+}
+
+function validateExperiencePayload(payload) {
+    const company = norm(payload.company)
+    const designation = norm(payload.designation)
+    const fromDate = norm(payload.from_date)
+    const toDate = norm(payload.to_date)
+    const annualPackage = Number(payload.annual_package)
+
+    if (!company) return "Company is required"
+    if (!designation) return "Designation is required"
+    if (!Number.isFinite(annualPackage) || annualPackage < 0) return "Annual package must be 0 or greater"
+    if (!fromDate) return "From date is required"
+    if (!toDate) return "To date is required"
+
+    const from = new Date(fromDate)
+    const to = new Date(toDate)
+    if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || from > to) {
+        return "Experience date range is invalid"
+    }
+
+    return null
+}
+
+function validateReferencePayload(payload) {
+    const name = norm(payload.reference_name)
+    const email = norm(payload.email)
+    const phone = norm(payload.phone_number)
+    if (!name) return "Reference name is required"
+    if (!email || !EMAIL_RE.test(email)) return "Valid reference email is required"
+    if (!phone || !MOBILE_RE.test(phone)) return "Reference phone must be 10 digits"
+    return null
+}
+
+function validateCandidateLanguagePayload(payload) {
+    const name = norm(payload.language_name)
+    if (!payload.language_id && !name) return "Language is required"
+    return null
+}
+
+function validateCandidateTechnologyPayload(payload) {
+    const name = norm(payload.technology_name)
+    if (!payload.technology_id && !name) return "Technology is required"
+    return null
+}
+
+function validatePreferencesPayload(payload) {
+    const current = parsePositiveNumber(payload.current_salary)
+    const expected = parsePositiveNumber(payload.expected_salary)
+    const notice = parsePositiveNumber(payload.notice_period)
+    if (Number.isNaN(current) || (current !== null && current < 0)) return "Current salary must be 0 or greater"
+    if (Number.isNaN(expected) || (expected !== null && expected < 0)) return "Expected salary must be 0 or greater"
+    if (Number.isNaN(notice) || (notice !== null && notice < 0)) return "Notice period must be 0 or greater"
+    return null
+}
+
+function parseSearch(searchText) {
+    const q = norm(searchText)
+    if (!q) return { sql: "", params: [] }
+
+    const prefix = q[0]
+    const term = q.slice(1)
+    const byPrefix = {
+        "$": { sql: "WHERE first_name LIKE ?", term },
+        "^": { sql: "WHERE last_name LIKE ?", term },
+        "@": { sql: "WHERE email LIKE ?", term },
+        "#": { sql: "WHERE mobile_number LIKE ?", term }
+    }
+
+    if (byPrefix[prefix]) {
+        const clean = norm(byPrefix[prefix].term)
+        return {
+            sql: byPrefix[prefix].sql,
+            params: [`%${clean}%`]
+        }
+    }
+
+    return {
+        sql: "WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR mobile_number LIKE ?",
+        params: [`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`]
+    }
+}
+
 //  CANDIDATES APIS
 
 app.get("/", (req, res) => {
-    res.render("index")
+    res.sendFile("index.html", { root: "public" })
 })
 app.get("/index", (req, res) => {
-    res.render("index")
+    res.redirect("/")
 })
 
 app.get("/users", (req, res) => {
-    res.render("users")
+    res.sendFile("users.html", { root: "public" })
 })
 
 app.get("/candidates", async (req, res) => {
     try {
-        const rows = await query("SELECT * FROM candidates")
-        res.json(rows)
+        const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1)
+        const pageSize = Math.min(50, Math.max(1, Number.parseInt(req.query.pageSize, 10) || 5))
+        const search = norm(req.query.search)
+        const where = parseSearch(search)
+        const offset = (page - 1) * pageSize
+
+        const countSql = `SELECT COUNT(*) AS total FROM candidates ${where.sql}`
+        const rowsSql = `SELECT * FROM candidates ${where.sql} ORDER BY candidate_id DESC LIMIT ? OFFSET ?`
+
+        const [countRow] = await query(countSql, where.params)
+        const rows = await query(rowsSql, [...where.params, pageSize, offset])
+        const total = countRow.total || 0
+
+        res.json({
+            data: rows,
+            pagination: {
+                page,
+                pageSize,
+                total,
+                totalPages: Math.max(1, Math.ceil(total / pageSize))
+            },
+            search
+        })
     } catch (err) {
         console.error(err)
         res.status(500).send("Database error")
@@ -107,13 +277,63 @@ app.get("/candidates/:id", async (req, res) => {
 app.post("/candidates", async (req, res) => {
     try {
         const d = req.body
+        const candidateError = validateCandidatePayload(d)
+        if (candidateError) return res.status(400).send(candidateError)
+
+        if (!Array.isArray(d.education) || d.education.length === 0) {
+            return res.status(400).send("At least one education row is required")
+        }
+        if (!Array.isArray(d.experience) || d.experience.length === 0) {
+            return res.status(400).send("At least one experience row is required")
+        }
+        if (!Array.isArray(d.languages) || d.languages.length === 0) {
+            return res.status(400).send("At least one language is required")
+        }
+        if (!Array.isArray(d.technologies) || d.technologies.length === 0) {
+            return res.status(400).send("At least one technology is required")
+        }
+
+        for (const edu of d.education) {
+            const rowError = validateEducationPayload({
+                course_name: edu.course,
+                passing_year: edu.year,
+                university_board: edu.board,
+                percentage: edu.percentage
+            })
+            if (rowError) return res.status(400).send(`Education: ${rowError}`)
+        }
+
+        for (const exp of d.experience) {
+            const rowError = validateExperiencePayload({
+                company: exp.company,
+                designation: exp.designation,
+                annual_package: exp.salary,
+                from_date: exp.from,
+                to_date: exp.to
+            })
+            if (rowError) return res.status(400).send(`Experience: ${rowError}`)
+        }
+
+        if (!d.reference || !d.reference.name) {
+            return res.status(400).send("Reference details are required")
+        }
+        const refError = validateReferencePayload({
+            reference_name: d.reference.name,
+            email: d.reference.email,
+            phone_number: d.reference.phone
+        })
+        if (refError) return res.status(400).send(refError)
+
+        const prefError = validatePreferencesPayload(d.preferences || {})
+        if (prefError) return res.status(400).send(prefError)
+
         const result = await query(
             `INSERT INTO candidates
              (first_name,last_name,designation,email,mobile_number,address_1,address_2,city,state,pincode,gender,relationship_status,dob)
              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-            [d.first_name, d.last_name, d.designation, d.email, d.mobile,
-            d.address1, d.address2, d.city, d.state, d.pincode,
-            d.gender, d.relationship, d.dob])
+            [norm(d.first_name), norm(d.last_name), norm(d.designation), norm(d.email), norm(d.mobile),
+            norm(d.address1), norm(d.address2), norm(d.city), norm(d.state), norm(d.pincode),
+            norm(d.gender).toLowerCase(), norm(d.relationship).toLowerCase(), d.dob])
 
         const candidateId = result.insertId
 
@@ -123,7 +343,7 @@ app.post("/candidates", async (req, res) => {
                 await query(
                     `INSERT INTO education (candidate_id, course_name, passing_year, university_board, percentage)
                      VALUES (?,?,?,?,?)`,
-                    [candidateId, edu.course, edu.year, edu.board, edu.percentage])
+                    [candidateId, norm(edu.course), edu.year, norm(edu.board), edu.percentage])
             }
         }
 
@@ -133,20 +353,20 @@ app.post("/candidates", async (req, res) => {
                 await query(
                     `INSERT INTO experience (candidate_id, company, designation, annual_package, from_date, to_date, reason_to_leaving, referral_contact, referral_name)
                      VALUES (?,?,?,?,?,?,?,?,?)`,
-                    [candidateId, exp.company, exp.designation, exp.salary,
-                        exp.from, exp.to, exp.reason, exp.contact, exp.name])
+                    [candidateId, norm(exp.company), norm(exp.designation), exp.salary,
+                        exp.from, exp.to, norm(exp.reason), norm(exp.contact), norm(exp.name)])
             }
         }
 
         // Languages
         if (d.languages && d.languages.length) {
             for (const lang of d.languages) {
-                let [existing] = await query("SELECT language_id FROM language_known WHERE language_name=?", [lang.name])
+                let [existing] = await query("SELECT language_id FROM language_known WHERE language_name=?", [norm(lang.name)])
                 let languageId
                 if (existing) {
                     languageId = existing.language_id
                 } else {
-                    const r = await query("INSERT INTO language_known (language_name) VALUES (?)", [lang.name])
+                    const r = await query("INSERT INTO language_known (language_name) VALUES (?)", [norm(lang.name)])
                     languageId = r.insertId
                 }
                 await query(
@@ -159,16 +379,17 @@ app.post("/candidates", async (req, res) => {
         // Technologies
         if (d.technologies && d.technologies.length) {
             for (const tech of d.technologies) {
-                let [existing] = await query("SELECT technology_id FROM technology_known WHERE technology_name=?", [tech.name])
+                const techName = norm(tech.name)
+                if (!techName) return res.status(400).send("Technology name is required")
+                let [existing] = await query("SELECT technology_id FROM technology_known WHERE technology_name=?", [techName])
                 let technologyId
                 if (existing) {
                     technologyId = existing.technology_id
                 } else {
-                    const r = await query("INSERT INTO technology_known (technology_name) VALUES (?)", [tech.name])
+                    const r = await query("INSERT INTO technology_known (technology_name) VALUES (?)", [techName])
                     technologyId = r.insertId
                 }
-                const levelMap = { beginner: "Beginner", intermediate: "Intermidiate", intermidiate: "Intermidiate", expert: "Expert" }
-                const level = levelMap[(tech.level || "beginner").toLowerCase()] || "Beginner"
+                const level = normalizeSkillLevel(tech.level)
                 await query(
                     `INSERT INTO candidate_technology (technology_id, candidate_id, skill_level)
                      VALUES (?,?,?)`,
@@ -181,7 +402,7 @@ app.post("/candidates", async (req, res) => {
             await query(
                 `INSERT INTO reference_contact (candidate_id, reference_name, email, phone_number)
                  VALUES (?,?,?,?)`,
-                [candidateId, d.reference.name, d.reference.email, d.reference.phone])
+                [candidateId, norm(d.reference.name), norm(d.reference.email), norm(d.reference.phone)])
         }
 
         // Preferences
@@ -189,8 +410,8 @@ app.post("/candidates", async (req, res) => {
             const prefResult = await query(
                 `INSERT INTO preferences (candidate_id, cureent_salary, expected_salary, notice_period, preferred_role)
                  VALUES (?,?,?,?,?)`,
-                [candidateId, d.preferences.current_salary || null, d.preferences.expected_salary || null,
-                    d.preferences.notice_period || null, d.preferences.preferred_role || null])
+                [candidateId, parsePositiveNumber(d.preferences.current_salary), parsePositiveNumber(d.preferences.expected_salary),
+                    parsePositiveNumber(d.preferences.notice_period), norm(d.preferences.preferred_role) || null])
 
             const preferenceId = prefResult.insertId
 
@@ -199,7 +420,7 @@ app.post("/candidates", async (req, res) => {
                 for (const loc of d.preferred_locations) {
                     await query(
                         `INSERT INTO location (candidate_id, preference_id, preferred_location) VALUES (?,?,?)`,
-                        [candidateId, preferenceId, loc])
+                        [candidateId, preferenceId, norm(loc)])
                 }
             }
         }
@@ -214,15 +435,18 @@ app.post("/candidates", async (req, res) => {
 app.put("/candidates/:id", async (req, res) => {
     try {
         const d = req.body
+        const candidateError = validateCandidatePayload(d)
+        if (candidateError) return res.status(400).send(candidateError)
+
         await query(
             `UPDATE candidates
              SET first_name=?, last_name=?, designation=?, email=?, mobile_number=?,
                  address_1=?, address_2=?, city=?, state=?, pincode=?,
                  gender=?, relationship_status=?, dob=?
              WHERE candidate_id=?`,
-            [d.first_name, d.last_name, d.designation, d.email, d.mobile,
-            d.address1, d.address2, d.city, d.state, d.pincode,
-            d.gender || null, d.relationship || null, d.dob || null,
+            [norm(d.first_name), norm(d.last_name), norm(d.designation), norm(d.email), norm(d.mobile),
+            norm(d.address1), norm(d.address2), norm(d.city), norm(d.state), norm(d.pincode),
+            norm(d.gender).toLowerCase(), norm(d.relationship).toLowerCase(), d.dob || null,
             req.params.id])
         res.send("Candidate Updated")
     } catch {
@@ -253,10 +477,12 @@ app.get("/candidates/:id/education", async (req, res) => {
 app.post("/candidates/:id/education", async (req, res) => {
     try {
         const d = req.body
+        const error = validateEducationPayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `INSERT INTO education (candidate_id, course_name, passing_year, university_board, percentage)
              VALUES (?,?,?,?,?)`,
-            [req.params.id, d.course_name, d.passing_year, d.university_board, d.percentage])
+            [req.params.id, norm(d.course_name), d.passing_year, norm(d.university_board), d.percentage])
         res.send("Education Added")
     } catch {
         res.status(500).send("Database error")
@@ -266,10 +492,12 @@ app.post("/candidates/:id/education", async (req, res) => {
 app.put("/education/:id", async (req, res) => {
     try {
         const d = req.body
+        const error = validateEducationPayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `UPDATE education SET course_name=?, passing_year=?, university_board=?, percentage=?
              WHERE education_id=?`,
-            [d.course_name, d.passing_year, d.university_board, d.percentage, req.params.id])
+            [norm(d.course_name), d.passing_year, norm(d.university_board), d.percentage, req.params.id])
         res.send("Education Updated")
     } catch {
         res.status(500).send("Database error")
@@ -299,11 +527,13 @@ app.get("/candidates/:id/experience", async (req, res) => {
 app.post("/candidates/:id/experience", async (req, res) => {
     try {
         const d = req.body
+        const error = validateExperiencePayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `INSERT INTO experience (candidate_id, company, designation, annual_package, from_date, to_date, reason_to_leaving, referral_contact, referral_name)
              VALUES (?,?,?,?,?,?,?,?,?)`,
-            [req.params.id, d.company, d.designation, d.annual_package,
-            d.from_date, d.to_date, d.reason_to_leaving, d.referral_contact, d.referral_name])
+            [req.params.id, norm(d.company), norm(d.designation), d.annual_package,
+            d.from_date, d.to_date, norm(d.reason_to_leaving), norm(d.referral_contact), norm(d.referral_name)])
         res.send("Experience Added")
     } catch {
         res.status(500).send("Database error")
@@ -313,12 +543,14 @@ app.post("/candidates/:id/experience", async (req, res) => {
 app.put("/experience/:id", async (req, res) => {
     try {
         const d = req.body
+        const error = validateExperiencePayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `UPDATE experience SET company=?, designation=?, annual_package=?, from_date=?, to_date=?,
              reason_to_leaving=?, referral_contact=?, referral_name=?
              WHERE experience_id=?`,
-            [d.company, d.designation, d.annual_package, d.from_date, d.to_date,
-            d.reason_to_leaving, d.referral_contact, d.referral_name, req.params.id])
+            [norm(d.company), norm(d.designation), d.annual_package, d.from_date, d.to_date,
+            norm(d.reason_to_leaving), norm(d.referral_contact), norm(d.referral_name), req.params.id])
         res.send("Experience Updated")
     } catch {
         res.status(500).send("Database error")
@@ -362,13 +594,15 @@ app.get("/candidates/:id/languages", async (req, res) => {
 app.post("/candidates/:id/languages", async (req, res) => {
     try {
         const d = req.body
+        const error = validateCandidateLanguagePayload(d)
+        if (error) return res.status(400).send(error)
         let languageId = d.language_id
         if (!languageId && d.language_name) {
-            let [existing] = await query("SELECT language_id FROM language_known WHERE language_name=?", [d.language_name])
+            let [existing] = await query("SELECT language_id FROM language_known WHERE language_name=?", [norm(d.language_name)])
             if (existing) {
                 languageId = existing.language_id
             } else {
-                const r = await query("INSERT INTO language_known (language_name) VALUES (?)", [d.language_name])
+                const r = await query("INSERT INTO language_known (language_name) VALUES (?)", [norm(d.language_name)])
                 languageId = r.insertId
             }
         }
@@ -431,20 +665,23 @@ app.get("/candidates/:id/technologies", async (req, res) => {
 app.post("/candidates/:id/technologies", async (req, res) => {
     try {
         const d = req.body
+        const error = validateCandidateTechnologyPayload(d)
+        if (error) return res.status(400).send(error)
         let technologyId = d.technology_id
         if (!technologyId && d.technology_name) {
-            let [existing] = await query("SELECT technology_id FROM technology_known WHERE technology_name=?", [d.technology_name])
+            const technologyName = norm(d.technology_name)
+            let [existing] = await query("SELECT technology_id FROM technology_known WHERE technology_name=?", [technologyName])
             if (existing) {
                 technologyId = existing.technology_id
             } else {
-                const r = await query("INSERT INTO technology_known (technology_name) VALUES (?)", [d.technology_name])
+                const r = await query("INSERT INTO technology_known (technology_name) VALUES (?)", [technologyName])
                 technologyId = r.insertId
             }
         }
         await query(
             `INSERT INTO candidate_technology (technology_id, candidate_id, skill_level)
              VALUES (?,?,?)`,
-            [technologyId, req.params.id, d.skill_level || "Beginner"])
+            [technologyId, req.params.id, normalizeSkillLevel(d.skill_level)])
         res.send("Technology Added")
     } catch {
         res.status(500).send("Database error")
@@ -457,7 +694,7 @@ app.put("/candidate-technology/:id", async (req, res) => {
         await query(
             `UPDATE candidate_technology SET skill_level=?
              WHERE candidate_technology_id=?`,
-            [d.skill_level, req.params.id])
+            [normalizeSkillLevel(d.skill_level), req.params.id])
         res.send("Technology Updated")
     } catch {
         res.status(500).send("Database error")
@@ -487,10 +724,12 @@ app.get("/candidates/:id/references", async (req, res) => {
 app.post("/candidates/:id/references", async (req, res) => {
     try {
         const d = req.body
+        const error = validateReferencePayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `INSERT INTO reference_contact (candidate_id, reference_name, email, phone_number)
              VALUES (?,?,?,?)`,
-            [req.params.id, d.reference_name, d.email, d.phone_number])
+            [req.params.id, norm(d.reference_name), norm(d.email), norm(d.phone_number)])
         res.send("Reference Added")
     } catch {
         res.status(500).send("Database error")
@@ -500,10 +739,12 @@ app.post("/candidates/:id/references", async (req, res) => {
 app.put("/references/:id", async (req, res) => {
     try {
         const d = req.body
+        const error = validateReferencePayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `UPDATE reference_contact SET reference_name=?, email=?, phone_number=?
              WHERE reference_contact_id=?`,
-            [d.reference_name, d.email, d.phone_number, req.params.id])
+            [norm(d.reference_name), norm(d.email), norm(d.phone_number), req.params.id])
         res.send("Reference Updated")
     } catch {
         res.status(500).send("Database error")
@@ -533,11 +774,13 @@ app.get("/candidates/:id/preferences", async (req, res) => {
 app.post("/candidates/:id/preferences", async (req, res) => {
     try {
         const d = req.body
+        const error = validatePreferencesPayload(d)
+        if (error) return res.status(400).send(error)
         const result = await query(
             `INSERT INTO preferences (candidate_id, cureent_salary, expected_salary, notice_period, preferred_role)
              VALUES (?,?,?,?,?)`,
-            [req.params.id, d.current_salary || null, d.expected_salary || null,
-            d.notice_period || null, d.preferred_role || null])
+            [req.params.id, parsePositiveNumber(d.current_salary), parsePositiveNumber(d.expected_salary),
+            parsePositiveNumber(d.notice_period), norm(d.preferred_role) || null])
         res.json({ message: "Preferences Added", preference_id: result.insertId })
     } catch {
         res.status(500).send("Database error")
@@ -547,11 +790,13 @@ app.post("/candidates/:id/preferences", async (req, res) => {
 app.put("/preferences/:id", async (req, res) => {
     try {
         const d = req.body
+        const error = validatePreferencesPayload(d)
+        if (error) return res.status(400).send(error)
         await query(
             `UPDATE preferences SET cureent_salary=?, expected_salary=?, notice_period=?, preferred_role=?
              WHERE preference_id=?`,
-            [d.current_salary || null, d.expected_salary || null,
-            d.notice_period || null, d.preferred_role || null, req.params.id])
+            [parsePositiveNumber(d.current_salary), parsePositiveNumber(d.expected_salary),
+            parsePositiveNumber(d.notice_period), norm(d.preferred_role) || null, req.params.id])
         res.send("Preferences Updated")
     } catch {
         res.status(500).send("Database error")
@@ -581,9 +826,10 @@ app.get("/candidates/:id/locations", async (req, res) => {
 app.post("/candidates/:id/locations", async (req, res) => {
     try {
         const d = req.body
+        if (!norm(d.preferred_location)) return res.status(400).send("Preferred location is required")
         await query(
             `INSERT INTO location (candidate_id, preference_id, preferred_location) VALUES (?,?,?)`,
-            [req.params.id, d.preference_id, d.preferred_location])
+            [req.params.id, d.preference_id, norm(d.preferred_location)])
         res.send("Location Added")
     } catch {
         res.status(500).send("Database error")
@@ -593,9 +839,10 @@ app.post("/candidates/:id/locations", async (req, res) => {
 app.put("/locations/:id", async (req, res) => {
     try {
         const d = req.body
+        if (!norm(d.preferred_location)) return res.status(400).send("Preferred location is required")
         await query(
             `UPDATE location SET preferred_location=? WHERE location_id=?`,
-            [d.preferred_location, req.params.id])
+            [norm(d.preferred_location), req.params.id])
         res.send("Location Updated")
     } catch {
         res.status(500).send("Database error")
