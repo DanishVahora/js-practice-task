@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const countryRoute = require('./routes/countryRoutes')
+const countryRoute = require('./routes/locationRoutes')
 
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -9,12 +9,13 @@ app.set('views', __dirname + '/views');
 
 app.use('/location', async (req, res) => {
 
-    let country = [];
+    let country;
     let state = [];
     let city = [];
 
-    country = await fetch("http://localhost:3000/api/country")
-    console.log(country);
+    const temp = await fetch("http://localhost:3000/api/country")
+    country = await temp.json()
+    console.log(await country);
 
 
 
