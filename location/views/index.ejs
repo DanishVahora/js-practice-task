@@ -20,27 +20,56 @@
     <label for="state">States</label>
     <select name="state" id="state">
         <option value="select">select</option>
-        <% state.forEach(opt=>{%>
-            <option value="<%= opt.state_name %>">
-                <%= opt.state_name %>
-            </option>
-            <% }) %>
+
     </select>
     <label for="city">Cities</label>
     <select name="city" id="city">
         <option value="select">select</option>
-        <% city.forEach(opt=>{%>
-            <option value="<%= opt.city_name %>">
-                <%= opt.city_name %>
-            </option>
-            <% }) %>
+
     </select>
 
 </body>
 
 
 <script>
-    
+    const cityDropdown = document.getElementById("city")
+    const stateDropdown = document.getElementById("state")
+    const countryDropdown = document.getElementById("country")
+
+    countryDropdown.addEventListener("change", async () => {
+        const country = countryDropdown.value;
+
+        stateDropdown.innerHTML = `<option value="select">select</option>`
+        cityDropdown.innerHTML = `<option value="select">select</option>`
+
+        const res = await fetch(`http://localhost:3000/api/state?country=${country}`)
+        const states = await res.json();
+
+
+        states.forEach(s => {
+            const option = document.createElement("option")
+            option.value = s.state_name
+            option.textContent = s.state_name
+            stateDropdown.appendChild(option)
+        });
+    })
+
+    stateDropdown.addEventListener("change", async () => {
+        const state = stateDropdown.value;
+
+        cityDropdown.innerHTML = `<option value="select">select</option>`
+
+
+        const res = await fetch(`http://localhost:3000/api/city?state=${state}`)
+        const cities = await res.json();
+
+        cities.forEach(c => {
+            const option = document.createElement("option")
+            option.value = c.city_name
+            option.textContent = c.city_name
+            cityDropdown.appendChild(option)
+        });
+    })
 </script>
 
 </html>
