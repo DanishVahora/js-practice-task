@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+
+<body>
+    <h3>Relationship Status</h3>
+    <select name="relationship_status" id="relationship_status">
+        <% relationship_status.forEach(opt=>{%>
+            <option value="<%= opt.value %>">
+                <%= opt.label %>
+            </option>
+            <% }) %>
+    </select>
+
+    <h3>Gender</h3>
+    <select name="gender" id="gender">
+        <% gender.forEach(opt=>{%>
+            <option value="<%= opt.value %>">
+                <%= opt.label %>
+            </option>
+            <% }) %>
+    </select>
+
+    <h3>Technologies</h3>
+    <select name="technologies" id="technologies">
+        <% technologies.forEach(opt=>{%>
+            <option value="<%= opt.value %>">
+                <%= opt.label %>
+            </option>
+            <% }) %>
+    </select>
+
+    <h3>Languages</h3>
+    <select name="languages" id="languages">
+        <% languages.forEach(opt=>{%>
+            <option value="<%= opt.value %>">
+                <%= opt.label %>
+            </option>
+            <% }) %>
+    </select>
+
+    <h3>Preferred Role</h3>
+    <select name="preferred_role" id="preferred_role">
+        <% preferred_role.forEach(opt=>{%>
+            <option value="<%= opt.value %>">
+                <%= opt.label %>
+            </option>
+            <% }) %>
+    </select>
+
+
+</body>
+
+</html>
