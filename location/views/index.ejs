@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <label for="country">Countries</label>
+    <select name="country" id="country">
+        <option value="select">select</option>
+        <% country.forEach(opt=>{%>
+            <option value="<%= opt.country_name %>">
+                <%= opt.country_name %>
+            </option>
+            <% }) %>
+    </select>
+    <label for="state">States</label>
+    <select name="state" id="state">
+        <option value="select">select</option>
+        <% state.forEach(opt=>{%>
+            <option value="<%= opt.state_name %>">
+                <%= opt.state_name %>
+            </option>
+            <% }) %>
+    </select>
+    <label for="city">Cities</label>
+    <select name="city" id="city">
+        <option value="select">select</option>
+        <% city.forEach(opt=>{%>
+            <option value="<%= opt.city_name %>">
+                <%= opt.city_name %>
+            </option>
+            <% }) %>
+    </select>
+
+</body>
+
+
+<script>
+    
+</script>
+
+</html>
