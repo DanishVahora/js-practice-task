@@ -4,24 +4,29 @@ const comboModel = require('../models/comboModel')
 
 router.get('/form', async (req, res) => {
     try {
-        const relationship_status = await comboModel.getOptionByName('relationship_status');
-        const gender = await comboModel.getOptionByName('gender');
-        const technologies = await comboModel.getOptionByName('technologies');
-        const languages = await comboModel.getOptionByName('languages');
-        const preferred_role = comboModel.getOptionByName('preferred_role');
-
+        const relationship_status = await comboModel.getOptionssByName('relationship_status');
+        const gender = await comboModel.getOptionssByName('gender');
+        const technologies = await comboModel.getOptionssByName('technologies');
+        const languages = await comboModel.getOptionssByName('languages');
+        const preferred_role = await comboModel.getOptionssByName('preferred_role');
+        const education = await comboModel.getOptionssByName('education');
+        const job_location = await comboModel.getOptionssByName('job_location');
         console.log(relationship_status,
             gender,
             technologies,
             languages,
-            preferred_role);
+            preferred_role,
+            education,
+            job_location);
 
         res.render('form', {
             relationship_status,
             gender,
             technologies,
             languages,
-            preferred_role
+            preferred_role,
+            education,
+            job_location
         })
     }
     catch (error) {

@@ -12,6 +12,10 @@ app.use('/api', comboRoutes);
 const pageRoutes = require('./routes/pageRoutes');
 app.use('/', pageRoutes);
 
+const countryRoute = require('./routes/locationRoutes')
+app.use('/ap', countryRoute);
+
+
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 })

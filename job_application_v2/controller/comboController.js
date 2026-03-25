@@ -1,8 +1,8 @@
 const comboModel = require('../models/comboModel')
-async function getOption(req, res) {
+async function getOptions(req, res) {
     try {
         const { name } = req.params
-        const options = await comboModel.getOptionByName(name);
+        const options = await comboModel.getOptionssByName(name);
         console.log(options)
         res.json(options)
     }
@@ -13,5 +13,5 @@ async function getOption(req, res) {
 }
 
 module.exports = {
-    getOption
+    getOptions
 }
