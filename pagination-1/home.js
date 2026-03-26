@@ -6,6 +6,7 @@ const path = require('path');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 const recordsPerPage = 10;
 const baseDataQuery = 'SELECT id, fname, lname, email, phone_number, gender, dob, address, city FROM basic_info';

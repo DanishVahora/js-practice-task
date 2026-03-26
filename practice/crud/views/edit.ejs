@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table border="1">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Enrollment</th>
+        <th>Adress</th>
+      </tr>
+
+      <tr>
+        <form action="/edit" method="post">
+          <td><%= students[0].id %></td>
+          <input type="hidden" value="<%= students[0].id %>" name="id" />
+          <td>
+            <input type="text" value="<%= students[0].name %>" name="name" />
+          </td>
+          <td>
+            <input type="email" value="<%= students[0].email %>" name="email" />
+          </td>
+          <td>
+            <input
+              type="number"
+              value="<%= students[0].enrollment%>"
+              name="enrollment"
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              value="<%= students[0].address %>"
+              name="address"
+            />
+          </td>
+          <button
+            type="submit"
+            style="background-color: lightblue; color: black"
+          >
+            Update
+          </button>
+        </form>
+      </tr>
+    </table>
+  </body>
+</html>

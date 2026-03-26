@@ -87,19 +87,30 @@ let languageIndex = 4;
 let technologyIndex = 5;
 const API_BASE_URL = "http://localhost:3000";
 
+async function addEducation() {
 
-function addEducation() {
-    document.getElementById("education_container").insertAdjacentHTML("beforeend", `<hr id="hr_${education_index}"/>
-                    <label id="course_label_${education_index}" for="course_${education_index}">Course:</label>
-                    <input type="text" id="course_${education_index}" name="course"><br><br>
-                    <label id="passing_year_label_${education_index}" for="passing_year_${education_index}">Passing Year:</label>
-                    <input type="number" id="passing_year_${education_index}" name="passing_year_${education_index}">
-                    <label id="uni_board_label_${education_index}" style="padding-left: 40px;" for="uni_board_${education_index}">University/Board:</label>
+    let res = await fetch(`http://localhost:3000/api/options/education`)
+    let optionHtml = ""
+    let education = await res.json()
+    education.forEach(opt => {
+        optionHtml += `<option value="${opt.value}">${opt.label}</option>`;
+    });
+
+    document.getElementById("education_container").innerHTML += `</br><label for="course_${education_index}">Course:</label>
+
+                    <select name="course_${education_index}" name="course" id="course">
+                        ${optionHtml}
+                    </select>
+
+                    <!-- <input type="text" id="course_1" name="course" value="<%= education.course %>"><br><br> -->
+                    <label for="passing_year_${education_index}">Passing Year:</label>
+                    <input type="number" id="passing_year_${education_index}" name="passing_year_${education_index}" min="1900" max="2100"><br><br>
+                    <label style="padding-left: 40px;" for="uni_board_${education_index}">University/Board:</label>
                     <input type="text" id="uni_board_${education_index}" name="uni_board_${education_index}">
-                    <label id="percentage_label_${education_index}" style="padding-left: 40px;" for="percentage_${education_index}">Percentage:</label>
+                    <label style="padding-left: 40px;" for="percentage_${education_index}">Percentage:</label>
                     <input type="number" id="percentage_${education_index}" name="percentage_${education_index}" step="0.01">
-                    <button type="button" id="remove_edu_${education_index}" onclick="removeEducationId(${education_index})">X</button>`);
-
+                    <button type="button" id="remove_edu_${education_index}" onclick="removeEducationId(${education_index})">X</button>
+`
     education_index++;
 }
 function removeEducationId(index) {
