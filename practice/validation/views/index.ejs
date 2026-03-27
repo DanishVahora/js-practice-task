@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <ul>
+        <% if (errors.length>0) { %>
+            <% errors.forEach(e=> { %>
+                <li>
+                    <%=e.msg%>
+                </li>
+                <% }) %>
+                    <% } %>
+    </ul>
+    <%if (success){%>
+        <p style="color: green;">Registration successful!</p>
+        <%}%>
+            <form id="form" method="post" action="/register">
+                <label for="name">Name:</label>
+                <input id="name" type="text" name="name">
+                <label for="email">Email:</label>
+                <input id="email" type="text" name="email">
+                <label for="password">Password:</label>
+                <input id="password" type="password" name="password">
+                <label for="age">Age:</label>
+                <input id="age" type="number" name="age">
+                <button type="submit">submit</button>
+            </form>
+            <p id="clientMsg"></p>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/zod@3.22.4/lib/index.umd.min.js"></script>
+<script src="/script.js"></script>
+
+</html>

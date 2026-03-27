@@ -4,7 +4,7 @@ const db = require('../config/db')
 async function getCity(req, res) {
     try {
         const state = req.query.state;
-        const [rows] = await db.execute(`select city_name from cities c join states s on c.state_id = s.state_id where s.state_name = '${state}'`)
+        const [rows] = await db.execute(`select city_name from city c join state s on c.state_id = s.state_id where s.state_name = '${state}'`)
         console.log(rows)
         res.json(rows)
     }

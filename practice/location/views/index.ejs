@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <select name="country" id="country">
+        <option value="select">select</option>
+        <% countries.forEach(c=> { %>
+            <option name="country" value="<%= c.country_name %>">
+                <%= c.country_name %>
+            </option>
+            <% }) %>
+    </select>
+
+    <select name="state" id="state">
+        <option value="select">select</option>
+    </select>
+
+    <select name="city" id="city">
+        <option value="select">select</option>
+    </select>
+</body>
+<script src="/script.js"></script>
+</html>

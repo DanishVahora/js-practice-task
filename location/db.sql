@@ -1,3 +1,6 @@
+
+create DATABASE location_combos;
+
 use location_combos;
 
 create table countries(

@@ -10,6 +10,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
+            border: 5px solid black;
             background-color: grey;
         }
 
@@ -71,9 +72,10 @@
         let signals = document.querySelectorAll(".signal")
 
         function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
+            return new Promise(resolve => {
+                setTimeout(resolve, ms)
+            })
         }
-
         function resetAll() {
             signals.forEach(signal => {
                 let lights = signal.querySelectorAll(".light")

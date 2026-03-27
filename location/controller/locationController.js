@@ -4,7 +4,7 @@ const db = require('../config/db')
 async function getCountry(req, res) {
     try {
 
-        const [rows] = await db.execute(`select country_name from countries`)
+        const [rows] = await db.execute(`select country_name from country`)
         console.log(rows)
         res.json(rows)
     }

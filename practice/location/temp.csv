@@ -1,0 +1,51 @@
+country,state,city
+India,Gujarat,Ahmedabad
+India,Gujarat,Surat
+India,Gujarat,Vadodara
+India,Gujarat,Rajkot
+India,Maharashtra,Mumbai
+India,Maharashtra,Pune
+India,Maharashtra,Nagpur
+India,Maharashtra,Nashik
+India,Rajasthan,Jaipur
+India,Rajasthan,Udaipur
+India,Rajasthan,Jodhpur
+India,Rajasthan,Kota
+India,Karnataka,Bangalore
+India,Karnataka,Mysore
+India,Tamil Nadu,Chennai
+India,Tamil Nadu,Coimbatore
+India,Delhi,New Delhi
+India,West Bengal,Kolkata
+India,Telangana,Hyderabad
+India,Andhra Pradesh,Vijayawada
+USA,California,Los Angeles
+USA,California,San Francisco
+USA,California,San Diego
+USA,Texas,Houston
+USA,Texas,Dallas
+USA,Texas,Austin
+USA,New York,New York City
+USA,New York,Buffalo
+USA,Illinois,Chicago
+USA,Illinois,Springfield
+Canada,Ontario,Toronto
+Canada,Ontario,Ottawa
+Canada,British Columbia,Vancouver
+Canada,Alberta,Calgary
+Canada,Quebec,Montreal
+UK,England,London
+UK,England,Manchester
+UK,Scotland,Edinburgh
+UK,Scotland,Glasgow
+Australia,New South Wales,Sydney
+Australia,Victoria,Melbourne
+Australia,Queensland,Brisbane
+Germany,Bavaria,Munich
+Germany,Berlin,Berlin
+France,Ile-de-France,Paris
+France,Provence,Marseille
+Japan,Tokyo,Tokyo
+Japan,Osaka,Osaka
+Brazil,Sao Paulo,Sao Paulo
+Brazil,Rio de Janeiro,Rio de Janeiro
