@@ -95,7 +95,7 @@
                             signals[j].querySelectorAll(".light")[0].classList.add("active");
                         }
                     }
-                    for (let t = 10; t > 0; t--) {
+                    for (let t = 10; t >= 0; t--) {
                         document.getElementById(`time${i}`).innerText = t + 2;
                         await sleep(1000)
                     }
@@ -108,7 +108,7 @@
                             signals[j].querySelectorAll(".light")[0].classList.add("active");
                         }
                     }
-                    for (let t = 2; t > 0; t--) {
+                    for (let t = 2; t >= 0; t--) {
                         document.getElementById(`time${i}`).innerText = t;
                         await sleep(1000)
                     }
