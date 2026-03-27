@@ -35,6 +35,7 @@
                 <div class="light red"></div>
                 <div class="light yellow"></div>
                 <div class="light green"></div>
+                <div id="time0">--.--</div>
             </td>
             <td></td>
         </tr>
@@ -43,12 +44,14 @@
                 <div class="light red"></div>
                 <div class="light yellow"></div>
                 <div class="light green"></div>
+                <div id="time1">--.--</div>
             </td>
             <td></td>
             <td class="signal">
                 <div class="light red"></div>
                 <div class="light yellow"></div>
                 <div class="light green"></div>
+                <div id="time2">--.--</div>
             </td>
         </tr>
         <tr>
@@ -57,6 +60,7 @@
                 <div class="light red"></div>
                 <div class="light yellow"></div>
                 <div class="light green"></div>
+                <div id="time3">--.--</div>
             </td>
             <td></td>
         </tr>
@@ -83,8 +87,6 @@
             while (true) {
                 for (let i = 0; i < 4; i++) {
 
-
-
                     //green
                     resetAll();
                     signals[i].querySelectorAll(".light")[2].classList.add("active");
@@ -93,7 +95,10 @@
                             signals[j].querySelectorAll(".light")[0].classList.add("active");
                         }
                     }
-                    await sleep(10000)
+                    for (let t = 10; t > 0; t--) {
+                        document.getElementById(`time${i}`).innerText = t + 2;
+                        await sleep(1000)
+                    }
 
                     //yellow
                     resetAll()
@@ -103,7 +108,10 @@
                             signals[j].querySelectorAll(".light")[0].classList.add("active");
                         }
                     }
-                    await sleep(2000)
+                    for (let t = 2; t > 0; t--) {
+                        document.getElementById(`time${i}`).innerText = t;
+                        await sleep(1000)
+                    }
                 }
             }
         }
