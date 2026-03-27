@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form" action="/add" method="post">
+        <label for="name">Name: </label>
+        <input type="text" name="name" placeholder="name">
+        <label for="email">Email:</label>
+        <input type="email" name="email" placeholder="email">
+        <label for="enrollment">Enrollment:</label>
+        <input type="number" name="enrollment" placeholder="enrollment">
+        <label for="address">Address:</label>
+        <input type="text" name="address" placeholder="address">
+        <button type="submit">submit</button>
+    </form>
+    <% if (error.length> 0) { %>
+        <ul style="color: red;">
+            <% error.forEach(err=> { %>
+                <li>
+                    <%= err.msg %>
+                </li>
+                <% }) %>
+        </ul>
+        <% } %>
+            <p id="msg"></p>
+</body>
+<script>
+    let form = document.getElementById("form")
+    let msg = document.getElementById("msg")
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let name = form.name.value.trim()
+        let email = form.email.value.trim()
+        let enrollment = form.enrollment.value.trim()
+        let address = form.address.value.trim()
+
+        if (name.length < 6) {
+            msg.innerText = "name atleast have 6 size long"
+            return
+        }
+        if (!email.includes("@") || !email.includes(".")) {
+            msg.innerText = "email must be corrrect"
+            return
+        }
+        form.submit()
+    })
+</script>
+
+</html>

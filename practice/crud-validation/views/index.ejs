@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>email</th>
+            <th>enrollment</th>
+            <th>address</th>
+        </tr>
+
+        <%records.forEach(ele=> {%>
+            <tr>
+                <td>
+                    <%= ele.id %>
+                </td>
+                <td>
+                    <%= ele.name %>
+                </td>
+                <td>
+                    <%= ele.email %>
+                </td>
+                <td>
+                    <%= ele.enrollment %>
+                </td>
+                <td>
+                    <%= ele.address %>
+                </td>
+            </tr>
+            <%})%>;
+    </table>
+    <a href="/?page=<%= currentPage-1 %>"><button>prev</button></a>
+    <a href="/?page=<%= currentPage+1 %>"><button>next</button></a>
+</body>
+
+</html>

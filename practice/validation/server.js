@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { body, validationResult } = require("express-validator");
-
+const { body, validationResult } = require("express-validator")
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -14,6 +13,20 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/", (req, res) => {
     res.render("index", { errors: [], success: null });
 });
+
+
+app.post("/register",[
+    body("name").isLength({min:8}).withMessage("Name Length must be more than 8"),
+    body("email").isEmail().withMessage("Email must be right"),
+    body("password").isLength({min:8}).withMessage("password must be of length 8"),
+    body("age").isInt({min:18}).withMessage("Must be above 18")
+],(req,res)=>{
+    const response = req.validationResult();
+    if(!response.isEmpty()){
+        res.render("index")
+    }
+})
+
 
 // POST form
 app.post(
@@ -40,6 +53,8 @@ app.post(
         });
     }
 );
+
+
 
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
