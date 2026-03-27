@@ -8,14 +8,25 @@ app.use(express.urlencoded({ extended: true }));
 
 async function startServer() {
   app.get("/", async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+    const offset = (page - 1) * limit;
+    console.log(`page clicked : ${page}`)
     try {
-      const [students] = await db.execute(`select * from basic_info`);
+      const [students] = await db.execute(`SELECT * FROM basic_info LIMIT ${limit} OFFSET ${offset}`);
+      const [row] = await db.execute(`select count(*) as total from basic_info`)
+      const totalRecords = row[0].total;
       //   console.log(students);
+      console.log(`current page is : ${page}`);
+      console.log(`total pages are : ${Math.ceil(totalRecords / limit)}`);
 
       res.status(200).render("index", {
         students,
+        currentPage: page,
+        totalPages: Math.ceil(totalRecords / limit)
       });
     } catch (err) {
+      console.log(err)
       res.status(500).render("err", {
         err,
       });

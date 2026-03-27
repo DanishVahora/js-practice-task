@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
+
 <body>
+    <center><a href="/add">Add Data</a></center>
     <table border="1">
         <tr>
             <th>Id</th>
@@ -16,18 +24,69 @@
             <th></th>
             <th></th>
         </tr>
-        
-        <% students.forEach(stud => { %>
-         <tr>
-            <td><%= stud.id %></td>
-            <td><%= stud.name %></td>
-            <td><%= stud.email %></td>
-            <td><%= stud.enrollment %></td>
-            <td><%= stud.address %></td>
-            <td><a href="/edit?id=<%=stud.id%>">Edit</a> </td>
-            <td><a style="color: red;" href="/delete?id=<%=stud.id%>">Delete</a></td>
-         </tr>
-        <% }) %>
+
+        <% students.forEach(stud=> { %>
+            <tr>
+                <td>
+                    <%= stud.id %>
+                </td>
+                <td>
+                    <%= stud.name %>
+                </td>
+                <td>
+                    <%= stud.email %>
+                </td>
+                <td>
+                    <%= stud.enrollment %>
+                </td>
+                <td>
+                    <%= stud.address %>
+                </td>
+                <td><a href="/edit?id=<%=stud.id%>">Edit</a> </td>
+                <td><a style="color: red;" href="/delete?id=<%=stud.id%>">Delete</a></td>
+            </tr>
+            <% }) %>
     </table>
+    <% if (currentPage>1) { %>
+        <button style="padding-right: 20px;">
+            <a href="/?page=<%= currentPage-1 %>">Prev</a>
+        </button>
+        <% } %>
+
+            <% if (currentPage>2) { %>
+                <button><a href="/?page=<%= currentPage-2 %>">
+                        <%= currentPage -2 %>
+                    </a></button>
+                <% } %>
+                    <% if (currentPage>1) { %>
+                        <button>
+                            <a href="/?page=<%= currentPage-1 %>">
+                                <%= currentPage -1 %>
+                            </a>
+                        </button>
+                        <% } %>
+                            <button style="background-color: red; color: white;font-size: larger;"> <a
+                                    href="/?page=<%= currentPage %>">
+                                    <%= currentPage %>
+                                </a></button>
+                            <% if (currentPage<totalPages-1) { %>
+                                <button>
+                                    <a href="/?page=<%= currentPage+1 %>">
+                                        <%= currentPage + 1 %>
+                                    </a>
+                                </button>
+                                <% } %>
+                                    <% if (currentPage<totalPages-2) { %>
+                                        <button><a href="/?page=<%= currentPage+2 %>">
+                                                <%= currentPage +2 %>
+                                            </a></button>
+                                        <% } %>
+                                            <% if (currentPage<=totalPages-1) { %>
+                                                <button style="padding-left: 20px;">
+                                                    <a href="/?page=<%= currentPage+1 %>">Next</a>
+                                                </button>
+                                                <% } %>
+
 </body>
+
 </html>

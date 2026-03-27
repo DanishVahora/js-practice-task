@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .light {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: grey;
+        }
+
+        .red.active {
+            background-color: red;
+        }
+
+        .yellow.active {
+            background-color: yellow;
+        }
+
+        .green.active {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td></td>
+            <td class="signal">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="signal">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </td>
+            <td></td>
+            <td class="signal">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="signal">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <button onclick="runTraffic()">RUN</button>
+    <script>
+
+        let signals = document.querySelectorAll(".signal")
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function resetAll() {
+            signals.forEach(signal => {
+                let lights = signal.querySelectorAll(".light")
+                lights.forEach(l => {
+                    l.classList.remove("active")
+                })
+            });
+        }
+
+        async function runTraffic() {
+            while (true) {
+                for (let i = 0; i < 4; i++) {
+
+
+
+                    //green
+                    resetAll();
+                    signals[i].querySelectorAll(".light")[2].classList.add("active");
+                    for (let j = 0; j < 4; j++) {
+                        if (i != j) {
+                            signals[j].querySelectorAll(".light")[0].classList.add("active");
+                        }
+                    }
+                    await sleep(10000)
+
+                    //yellow
+                    resetAll()
+                    signals[i].querySelectorAll(".light")[1].classList.add("active");
+                    for (let j = 0; j < 4; j++) {
+                        if (i != j) {
+                            signals[j].querySelectorAll(".light")[0].classList.add("active");
+                        }
+                    }
+                    await sleep(2000)
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

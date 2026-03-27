@@ -4,7 +4,7 @@ try {
   pool = sql.createPool({
     host: "localhost",
     user: "root",
-    password: "Root@1234",
+    password: "root",
     database: "student_db",
     waitForConnections: true,
     connectionLimit: 10,
